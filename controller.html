@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset=utf-8 />
+  <title>Controller</title>
+  <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+  <script src='https://api.mapbox.com/mapbox-gl-js/v0.46.0/mapbox-gl.js'></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <link href='https://api.mapbox.com/mapbox-gl-js/v0.46.0/mapbox-gl.css' rel='stylesheet' />
+  <style>
+    body { margin:0; padding:0; }
+    #map { position:absolute; top:0; bottom:0; width:100%; }
+  </style>
+</head>
+
+<body>
+
+  <style>
+
+      #rectangle {
+          width:800px;
+          height:300px;
+          position:absolute;
+          top:50%;
+          left:50%;
+          transform:translate(-50%,-50%);
+          border: 10px dotted red;
+          opacity:0.5;
+          pointer-events:none;
+      }
+
+      #menu {
+          background: #fff;
+          position: absolute;
+          z-index: 1;
+          top: 10px;
+          right: 10px;
+          border-radius: 3px;
+          width: 120px;
+          border: 1px solid rgba(0,0,0,0.4);
+          font-family: 'Open Sans', sans-serif;
+      }
+
+      #menu a {
+          font-size: 13px;
+          color: #404040;
+          display: block;
+          margin: 0;
+          padding: 0;
+          padding: 10px;
+          text-decoration: none;
+          border-bottom: 1px solid rgba(0,0,0,0.25);
+          text-align: center;
+      }
+
+      #menu a:last-child {
+          border: none;
+      }
+
+      #menu a:hover {
+          background-color: #f8f8f8;
+          color: #404040;
+      }
+
+      #menu a.active {
+          background-color: #3887be;
+          color: #ffffff;
+      }
+
+      #menu a.active:hover {
+          background: #3074a4;
+      }
+
+  </style>
+
+  <nav id="menu"></nav>
+  <div id="map"></div>
+  <div id="rectangle"></div>
+
+  <script>
+
+  var socket = io('http://10.136.17.165:8080');
+
+  socket.on('pushLocUpdate', function(data) {
+    console.log("I UPDATED")
+  })
+
+  mapboxgl.accessToken = 'pk.eyJ1IjoibW9kZXJubG92ZWxhY2UiLCJhIjoiY2pmY24zNzhmM2VmaTJ4cDRlNmVoa24wdCJ9.7GBTZc76YFp947kU7A14Gg';
+
+  var map = new mapboxgl.Map({
+      container: 'map',
+      //style: 'mapbox://styles/mapbox/streets-v9',
+      style: 'mapbox://styles/modernlovelace/cjiw122ea18z12so7ijbzd98v',
+      zoom: 12,
+      bearing: -90,
+      //pitch: 60,
+      center: [-84.3951, 33.7634],
+      interactive: true
+  });
+
+  map.on('load', function () {
+      // permit layer
+      map.addSource('permits', {
+          type: 'vector',
+          url: 'mapbox://modernlovelace.cjiqeva5803dtfrrvg9g78mzz-7xosm'
+      });
+      map.addLayer({
+          'id': 'permits',
+          'type': 'circle',
+          'source': 'permits',
+          'layout': {
+              'visibility': 'visible'
+          },
+          'paint': {
+              'circle-radius': 8,
+              'circle-color': 'blue'
+          },
+          'source-layer': 'commercial_land_development_2017'
+      });
+      // beltline layer
+      map.addSource('beltline', {
+          type: 'vector',
+          url: 'mapbox://modernlovelace.9bd0nhcf'
+      });
+      map.addLayer({
+          'id': 'beltline',
+          'type': 'line',
+          'source': 'beltline',
+          'source-layer': 'Beltline_Weave-a4j3wv',
+          'layout': {
+              'visibility': 'visible',
+              'line-join': 'round',
+              'line-cap': 'round'
+          },
+          'paint': {
+              'line-color': 'purple',
+              'line-width': 8
+          }
+      });
+  });
+
+  map.on('moveend', function (e) {
+        console.log("Sending change to server...")
+        socket.emit('locUpdate', {'center': map.getCenter(), 'zoom': map.getZoom(), 'bearing':map.getBearing()})
+  });
+
+  // link layers to buttons
+  var toggleableLayerIds = [ 'beltline', 'permits' ];
+
+  for (var i = 0; i < toggleableLayerIds.length; i++) {
+      var id = toggleableLayerIds[i];
+
+      var link = document.createElement('a');
+      link.href = '#';
+      link.className = 'active';
+      link.textContent = id;
+
+      link.onclick = function (e) {
+          var clickedLayer = this.textContent;
+          e.preventDefault();
+          e.stopPropagation();
+
+          var visibility = map.getLayoutProperty(clickedLayer, 'visibility');
+
+          if (visibility === 'visible') {
+              map.setLayoutProperty(clickedLayer, 'visibility', 'none');
+              socket.emit('hideLayer', {'clickedLayer':clickedLayer})
+              this.className = '';
+          } else {
+              this.className = 'active';
+              map.setLayoutProperty(clickedLayer, 'visibility', 'visible');
+              socket.emit('showLayer', {'clickedLayer':clickedLayer})
+          }
+      };
+
+      var layers = document.getElementById('menu');
+      layers.appendChild(link);
+  }
+
+  </script>
+
+</body>
+</html>
