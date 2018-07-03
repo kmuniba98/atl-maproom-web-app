@@ -59,7 +59,7 @@
           'type': 'circle',
           'source': 'permits',
           'layout': {
-              'visibility': 'visible'
+              'visibility': 'none'
           },
           'paint': {
               'circle-radius': 8,
@@ -83,9 +83,38 @@
               'line-cap': 'round'
           },
           'paint': {
-              'line-color': 'purple',
+              'line-color': 'yellow green',
               'line-width': 8
           }
+      });
+      // tax layer
+      map.addSource('tax', {
+          type: 'vector',
+          url: 'mapbox://annabelrothschild.7wx31rzw'
+      });
+      map.addLayer({
+          'id': 'tax',
+          'type': 'circle',
+          'source': 'tax',
+          'interactive': true,
+          "layout": {
+                    "text-font": "Open Sans Semibold, Arial Unicode MS Bold",
+                    "text-offset": [0, 0.6],
+                    "text-anchor": "top"
+                  },
+          'layout': {
+              'visibility': 'none'
+          },
+          'paint': {
+              'circle-radius': 3,
+              'circle-color': [
+                  "rgb",
+                  ["get", "Red"],
+                  ["get", "Green"],
+                  ["get", "Blue"]
+              ]
+          },
+          'source-layer': 'AllPointsGeoJSON-5mv4rv'
       });
   });
 
