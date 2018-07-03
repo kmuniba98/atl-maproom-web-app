@@ -18,16 +18,44 @@
 
   <style>
 
-      #rectangle {
+      #shortRect {
           width:800px;
-          height:300px;
+          height:400px;
           position:absolute;
           top:50%;
           left:50%;
           transform:translate(-50%,-50%);
-          border: 10px dotted red;
+          border:10px dotted red;
           opacity:0.5;
           pointer-events:none;
+      }
+
+      #longRect {
+        width:800px;
+        height:200px;
+        position:absolute;
+        top:50%;
+        left:50%;
+        transform:translate(-50%,-50%);
+        border:10px dotted red;
+        opacity:0.5;
+        pointer-events:none;
+        display:none;
+      }
+
+      #changeRect {
+          display: block;
+          position: relative;
+          margin: 0px auto;
+          width: 25%;
+          height: 40px;
+          padding: 10px;
+          border: none;
+          border-radius: 3px;
+          font-size: 12px;
+          text-align: center;
+          color: #fff;
+          background: #ee8a65;
       }
 
       #menu {
@@ -76,11 +104,14 @@
 
   <nav id="menu"></nav>
   <div id="map"></div>
-  <div id="rectangle"></div>
+  <div id="shortRect"></div>
+  <div id="longRect"></div>
+  <br/>
+  <button id='changeRect'>Change Rectangle</button>
 
   <script>
 
-  var socket = io('http://10.136.17.165:8080');
+  var socket = io('http://10.136.23.36:8080');
 
   socket.on('pushLocUpdate', function(data) {
     console.log("I UPDATED")
@@ -98,6 +129,23 @@
       center: [-84.3951, 33.7634],
       interactive: true
   });
+
+  // function to toggle rectangle
+  function toggleRectangle() {
+      var x = document.getElementById("shortRect");
+      var y = document.getElementById("longRect");
+      if (x.style.display === "none") {
+          x.style.display = "block";
+          y.style.display = "none";
+      } else {
+          x.style.display = "none";
+          y.style.display = "block";
+      }
+  }
+
+  document.getElementById('changeRect').addEventListener('click', function () {
+    toggleRectangle();
+});
 
   map.on('load', function () {
       // permit layer
@@ -162,7 +210,6 @@
           e.stopPropagation();
 
           var visibility = map.getLayoutProperty(clickedLayer, 'visibility');
-
           if (visibility === 'visible') {
               map.setLayoutProperty(clickedLayer, 'visibility', 'none');
               socket.emit('hideLayer', {'clickedLayer':clickedLayer})
