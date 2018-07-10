@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-
 <head>
   <meta charset=utf-8 />
   <title>Controller</title>
@@ -15,7 +14,6 @@
 </head>
 
 <body>
-
   <style>
 
       #shortRect {
@@ -44,6 +42,21 @@
       }
 
       #changeRect {
+          display: block;
+          position: relative;
+          margin: 0px auto;
+          width: 25%;
+          height: 40px;
+          padding: 10px;
+          border: none;
+          border-radius: 3px;
+          font-size: 12px;
+          text-align: center;
+          color: #fff;
+          background: #ee8a65;
+      }
+
+      #projectButton {
           display: block;
           position: relative;
           margin: 0px auto;
@@ -128,8 +141,8 @@
 
   <nav id="menu"></nav>
   <div id="map"></div>
-  <div id="shortRect"></div>
-  <div id="longRect"></div>
+  <canvas id="shortRect"></canvas>
+  <canvas id="longRect"></canvas>
   <div id='state-legend' class='legend'>
       <h4>% change in assessment</h4>
       <div><span style='background-color: #ff0000 '></span>100</div>
@@ -139,10 +152,11 @@
   </div>
   <br/>
   <button id='changeRect'>Change Rectangle</button>
+  <button id='projectButton'>Project</button>
 
   <script>
 
-  var socket = io('http://10.136.23.36:8080');
+  var socket = io('http://128.61.54.6:8080');
 
   socket.on('pushLocUpdate', function(data) {
     console.log("I UPDATED")
@@ -152,23 +166,32 @@
 
   var map = new mapboxgl.Map({
       container: 'map',
-      //style: 'mapbox://styles/mapbox/streets-v9',
       style: 'mapbox://styles/modernlovelace/cjiw122ea18z12so7ijbzd98v',
       zoom: 12,
       bearing: -90,
-      //pitch: 60,
       center: [-84.3951, 33.7634],
       interactive: true
   });
+
+  function getActiveRect(){
+    var x = document.getElementById("shortRect");
+    var y = document.getElementById("longRect");
+    if (x.style.display === "none") { // long rectangle active
+        return y;
+    } else {                          // short rectangle active
+        return x;
+    }
+  }
 
   // function to toggle rectangle
   function toggleRectangle() {
       var x = document.getElementById("shortRect");
       var y = document.getElementById("longRect");
-      if (x.style.display === "none") {
+
+      if (x.style.display === "none") { // turn short rectangle on
           x.style.display = "block";
           y.style.display = "none";
-      } else {
+      } else {                          // turn long rectangle on
           x.style.display = "none";
           y.style.display = "block";
       }
@@ -176,7 +199,45 @@
 
   document.getElementById('changeRect').addEventListener('click', function () {
     toggleRectangle();
-});
+    socket.emit('changeSize', {'activeRectangle':getActiveRect().id})
+  });
+  document.getElementById('projectButton').addEventListener('click', function () {
+    project();
+  });
+
+
+  function project(){
+    var stage = getActiveRect(), // Get the canvas element by Id
+          ctx = stage.getContext('2d'), // Canvas 2d rendering context
+          x = 0, //intial horizontal position of drawn rectangle
+          y = 0, //intial vertical position of drawn rectangle
+          wid = stage.height, //width of the drawn rectangle
+          hei = stage.height; //height of the drawn rectangle
+
+    //Draw Rectangle function
+    function drawRect(x,y,wid,hei) {
+        ctx.fillStyle = '#666'; // Fill color of rectangle drawn
+        ctx.fillRect(x, y, wid, hei);
+    }
+    ctx.clearRect(0,0, 500, 500);
+    drawRect(x,y,wid,hei); //Drawing rectangle on initial load
+    //move rectangle inside the canvas using arrow keys
+    window.onkeydown = function(event) {
+        var keyPr = event.keyCode; //Key code of key pressed
+
+        if(keyPr === 39 && x<=140){
+            x = x+10; //right arrow add 20 from current
+        } else if(keyPr === 37 && x>5){
+            x = x-10; //left arrow subtract 20 from current
+        }
+
+        /*clearing anything drawn on canvas
+         *comment this below do draw path */
+        ctx.clearRect(0,0, 500, 500);
+        //Drawing rectangle at new position
+        drawRect(x,y,wid,hei);
+    };
+  }
 
   map.on('load', function () {
       // permit layer
@@ -286,6 +347,5 @@
   }
 
   </script>
-
 </body>
 </html>

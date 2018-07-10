@@ -20,7 +20,7 @@
 
   <script>
 
-  var socket = io('http://10.136.23.36:8080');
+  var socket = io('http://128.61.54.6:8080');
 
   socket.on('pushLocUpdate', function(data) {
     console.log("Controller changed...");
@@ -40,6 +40,9 @@
     var shownLayer = data['clickedLayer'];
     map.setLayoutProperty(shownLayer, 'visibility', 'visible');
   });
+  socket.on('pushChangeSize', function(data){ // for toggleRectangle
+
+  })
 
   mapboxgl.accessToken = 'pk.eyJ1IjoibW9kZXJubG92ZWxhY2UiLCJhIjoiY2pmY24zNzhmM2VmaTJ4cDRlNmVoa24wdCJ9.7GBTZc76YFp947kU7A14Gg';
 

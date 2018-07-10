@@ -56,12 +56,11 @@ io.on('connection', function (socket) {
     console.log(data.clickedLayer + " Layer shown");
     socket.broadcast.emit('pushShowLayer', data) // will emit to client that didn't send
   });
+  socket.on('changeSize', function(data) {  // for toggleRectangle
+    console.log(data.activeRectangle + " size selected");
+    socket.broadcast.emit('pushChangeSize', data);
+  })
 });
-
-
-
-
-
 
 /*
 
