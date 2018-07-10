@@ -80,9 +80,9 @@
 
   <script>
 
-  var socket = io('http://10.136.17.165:8080');
+  var socket = io('http://143.215.119.183:8080');
 
-  socket.on('pushLocUpdate', function(data) {
+  socket.on('pushMapUpdate', function(data) {
     console.log("I UPDATED")
   })
 
@@ -142,7 +142,7 @@
 
   map.on('moveend', function (e) {
         console.log("Sending change to server...")
-        socket.emit('locUpdate', {'center': map.getCenter(), 'zoom': map.getZoom(), 'bearing':map.getBearing()})
+        socket.emit('mapUpdate', {'center': map.getCenter(), 'zoom': map.getZoom(), 'bearing':map.getBearing(), 'bounds':map.getBounds()})
   });
 
   // link layers to buttons

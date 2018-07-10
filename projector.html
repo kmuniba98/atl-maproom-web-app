@@ -20,14 +20,19 @@
 
   <script>
 
-  var socket = io('http://10.136.17.165:8080');
+  var socket = io('http://143.215.119.183:8080');
 
-  socket.on('pushLocUpdate', function(data) {
+  socket.on('pushMapUpdate', function(data) {
     console.log("Controller changed...");
 
     var newCenter = data['center'];
     var newZoom = data['zoom'];
     var newBearing = data['bearing'];
+
+    console.log(data['bounds']);
+    console.log(data['projectorPosition'])
+
+    var westLong =
 
     map.easeTo({center: newCenter, zoom:newZoom, bearing:newBearing})
   })

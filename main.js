@@ -36,15 +36,13 @@ app.get('/projector.html', function(req, res){
 
 io.on('connection', function (socket) {
 
-  socket.emit('news', { hello: 'world' });
+  socket.on('mapUpdate', function (data) {
+    console.log("Map updated, pushing...");
 
-  socket.on('my other event', function (data) {
-    console.log(data);
-  });
+    var projectorPosition = 0.5;
+    data.projectorPosition = projectorPosition;
 
-  socket.on('locUpdate', function (data) {
-    console.log("Broadcasting map update...");
-    socket.broadcast.emit('pushLocUpdate', data)
+    socket.broadcast.emit('pushMapUpdate', data)
   });
 
   // added by Muniba
@@ -56,24 +54,13 @@ io.on('connection', function (socket) {
     console.log(data.clickedLayer + " Layer shown");
     socket.broadcast.emit('pushShowLayer', data) // will emit to client that didn't send
   });
+
+  socket.on('sensorConnected', function(data) {
+    console.log("Sensor server connected");
+  })
+
+  socket.on('sensorUpdate', function(data) {
+    console.log("Sensor updated: " + data.distance);
+  })
+
 });
-
-
-
-
-
-
-/*
-
-mapboxgl.accessToken = 'pk.eyJ1IjoiY2Zwb2xhY2siLCJhIjoiY2ppb3RlMXBiMGRjdzN2dDk3eWI2cmVkbyJ9.amywF3L9CAgcjl3GeFHb4g';
-
-var mapA = new mapboxgl.Map({
-  container: 'mapA', // container id
-  style:'mapbox://styles/cfpolack/cjiugdneq69l72rqo4wzuixpw'
-});
-
-var mapB = new mapboxgl.Map({
-  container: 'mapB', // container id
-  style:'mapbox://styles/cfpolack/cjiugdneq69l72rqo4wzuixpw'
-});
-*/
