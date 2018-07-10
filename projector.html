@@ -50,8 +50,12 @@
 
     curRatio = ((data.distance) / (end-start))
 
-    curLat = curRatio * (upperLat - lowerLat)
-    curLong = curRatio * (rightLong - leftLong)
+    curLat = lowerLat + (curRatio * (upperLat - lowerLat))
+    curLong = leftLong + (curRatio * (rightLong - leftLong))
+
+    console.log("Moving to " + curLat + ", " + curLong)
+
+    //map.easeTo({center: newCenter, zoom:mapZoom, bearing:mapBearing})
 
   });
 
