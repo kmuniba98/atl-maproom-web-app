@@ -23,7 +23,7 @@
   var socket = io('http://143.215.119.183:8080');
 
   socket.on('pushMapUpdate', function(data) {
-    console.log("Controller changed...");
+    console.log("Controller changed, updating map...");
 
     var newCenter = data['center'];
     var newZoom = data['zoom'];
@@ -35,12 +35,17 @@
     var westLong =
 
     map.easeTo({center: newCenter, zoom:newZoom, bearing:newBearing})
-  })
+  });
+
+  socket.on('pushSensorUpdate', function(data) {
+    console.log("New sensor reading: " + data.distance)
+  });
 
   socket.on('pushHideLayer', function(data){
     var hiddenLayer = data['clickedLayer'];
     map.setLayoutProperty(hiddenLayer, 'visibility', 'none');
   });
+
   socket.on('pushShowLayer', function(data){
     var shownLayer = data['clickedLayer'];
     map.setLayoutProperty(shownLayer, 'visibility', 'visible');

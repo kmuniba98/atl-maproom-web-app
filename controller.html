@@ -82,8 +82,8 @@
 
   var socket = io('http://143.215.119.183:8080');
 
-  socket.on('pushMapUpdate', function(data) {
-    console.log("I UPDATED")
+  socket.on('pushSensorUpdate', function(data) {
+    console.log("New sensor reading: " + data.distance)
   })
 
   mapboxgl.accessToken = 'pk.eyJ1IjoibW9kZXJubG92ZWxhY2UiLCJhIjoiY2pmY24zNzhmM2VmaTJ4cDRlNmVoa24wdCJ9.7GBTZc76YFp947kU7A14Gg';

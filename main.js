@@ -61,6 +61,7 @@ io.on('connection', function (socket) {
 
   socket.on('sensorUpdate', function(data) {
     console.log("Sensor updated: " + data.distance);
+    socket.broadcast.emit('pushSensorUpdate', data);
   })
 
 });
