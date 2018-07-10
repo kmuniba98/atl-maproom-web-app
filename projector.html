@@ -39,7 +39,7 @@
     lowerLat = data['lowerLat'];
     upperLat = data['upperLat'];
 
-    //map.easeTo({center: newCenter, zoom:newZoom, bearing:newBearing})
+    map.easeTo({center: mapCenter, zoom:mapZoom, bearing:mapBearing})
   });
 
   socket.on('pushSensorUpdate', function(data) {

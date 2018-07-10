@@ -39,6 +39,8 @@ io.on('connection', function (socket) {
   socket.on('mapUpdate', function (data) {
     console.log("Map updated, pushing...");
 
+    console.log(data.bounds)
+
     var projectorPosition = 0.5;
     data.projectorPosition = projectorPosition;
 
