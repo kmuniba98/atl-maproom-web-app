@@ -45,15 +45,21 @@
   socket.on('pushSensorUpdate', function(data) {
     console.log("New sensor reading: " + data.distance)
 
+    var leftLong = -84.44333855642014;
+    var rightLong = -84.27173029708604
+
     var start = 3750
     var end = 5350
 
     curRatio = ((data.distance) / (end-start))
 
-    curLat = lowerLat + (curRatio * (upperLat - lowerLat))
+    //curLat = lowerLat + (curRatio * (upperLat - lowerLat))
     curLong = leftLong + (curRatio * (rightLong - leftLong))
 
-    console.log("Moving to " + curLat + ", " + curLong)
+    console.log("Current position number is " + curRatio)
+    console.log("Moving to " + curLong)
+
+    newCenter = {lng: curLong, lat: 33.76777287243536}
 
     //map.easeTo({center: newCenter, zoom:mapZoom, bearing:mapBearing})
 
