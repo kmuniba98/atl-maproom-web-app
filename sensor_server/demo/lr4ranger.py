@@ -36,21 +36,19 @@ if result != 0:
 # Get a single range
 #
 
-try:
-    while True:
-        range = ctypes.c_int()
-        result = lr4ranger_lib.lr4ranger_get_range(handle, ctypes.byref(range))
-        if result != 0:
-            print 'Failed to get range: ' + str(result)
-        if range.value == 0:
-            continue
-        else:
-            print str(range.value)
-            sys.stdout.flush()
 
-        time.sleep(1)
-except KeyboardInterrupt:
-    console.log("Closing USB Connection...")
+for i in range (1000):
+    range = ctypes.c_int()
+    result = lr4ranger_lib.lr4ranger_get_range(handle, ctypes.byref(range))
+    if result != 0:
+        print 'Failed to get range: ' + str(result)
+    if range.value == 0:
+        continue
+    else:
+        print str(range.value)
+        sys.stdout.flush()
+
+    time.sleep(1)
 
 
 
