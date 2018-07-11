@@ -17,8 +17,9 @@
   <style>
 
       #shortRect {
-          width:800px;
-          height:400px;
+          width:50%;
+          padding:10%;
+          box-sizing: border-box;
           position:absolute;
           top:50%;
           left:50%;
@@ -29,46 +30,52 @@
       }
 
       #longRect {
-        width:800px;
-        height:200px;
+        width:50%;
+        padding:25%;
+        box-sizing: border-box;
         position:absolute;
         top:50%;
         left:50%;
         transform:translate(-50%,-50%);
         border:10px dotted red;
         opacity:0.5;
+
         pointer-events:none;
         display:none;
       }
 
       #changeRect {
-          display: block;
-          position: relative;
-          margin: 0px auto;
-          width: 25%;
-          height: 40px;
-          padding: 10px;
-          border: none;
-          border-radius: 3px;
-          font-size: 12px;
-          text-align: center;
-          color: #fff;
-          background: #ee8a65;
+        display: block;
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        width: 200px;
+        padding: 15px;
+        border: none;
+        border-radius: 3px;
+        font: 'Open Sans', sans-serif;
+        font-size: 18px;
+        font-weight: bold;
+        text-align: center;
+        color: #fff;
+        background: #ee8a65;
       }
 
       #projectButton {
           display: block;
-          position: relative;
-          margin: 0px auto;
-          width: 25%;
-          height: 40px;
-          padding: 10px;
+          position: absolute;
+          top: 10px;
+          left: 225px;
+          width: 120px;
+          padding: 15px;
           border: none;
           border-radius: 3px;
-          font-size: 12px;
+          font: 'Open Sans', sans-serif;
+          font-size: 18px;
+          font-weight: bold;
           text-align: center;
           color: #fff;
-          background: #ee8a65;
+          background: #2ECC71;
       }
 
       #menu {
@@ -78,13 +85,13 @@
           top: 10px;
           right: 10px;
           border-radius: 3px;
-          width: 120px;
+          width: 175px;
           border: 1px solid rgba(0,0,0,0.4);
           font-family: 'Open Sans', sans-serif;
       }
 
       #menu a {
-          font-size: 13px;
+          font-size: 18px;
           color: #404040;
           display: block;
           margin: 0;
@@ -118,11 +125,14 @@
       border-radius: 3px;
       bottom: 30px;
       box-shadow: 0 1px 2px rgba(0,0,0,0.10);
-      font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
-      padding: 10px;
+      font-size: 18px;
+      font-family: 'Open Sans', sans-serif;
+      padding: 15px;
       position: absolute;
+      border: 1px solid rgba(0,0,0,0.4);
       right: 10px;
       z-index: 1;
+      color: #404040;
       }
 
       .legend h4 {
@@ -144,14 +154,14 @@
   <canvas id="shortRect"></canvas>
   <canvas id="longRect"></canvas>
   <div id='state-legend' class='legend'>
-      <h4>% change in assessment</h4>
+      <h4>Percent Change:<br>2010 - 2017</h4>
       <div><span style='background-color: #ff0000 '></span>100</div>
       <div><span style='background-color: #A25626'></span>0</div>
       <div><span style='background-color: #000000'></span>-100</div>
       <div><span style='background-color: #0000FF'></span>Infinite</div>
   </div>
   <br/>
-  <button id='changeRect'>Change Rectangle</button>
+  <button id='changeRect'>Toggle Map Size</button>
   <button id='projectButton'>Project</button>
 
   <script>
@@ -240,24 +250,6 @@
   }
 
   map.on('load', function () {
-      // permit layer
-      map.addSource('permits', {
-          type: 'vector',
-          url: 'mapbox://modernlovelace.cjiqeva5803dtfrrvg9g78mzz-7xosm'
-      });
-      map.addLayer({
-          'id': 'permits',
-          'type': 'circle',
-          'source': 'permits',
-          'layout': {
-              'visibility': 'none'
-          },
-          'paint': {
-              'circle-radius': 8,
-              'circle-color': 'blue'
-          },
-          'source-layer': 'commercial_land_development_2017'
-      });
       // beltline layer
       map.addSource('beltline', {
           type: 'vector',
@@ -279,14 +271,14 @@
           }
       });
       // tax layer
-      map.addSource('tax', {
+      map.addSource('Tax Assessment', {
           type: 'vector',
-          url: 'mapbox://annabelrothschild.7wx31rzw'
+          url: 'mapbox://annabelrothschild.4lnspuic'
       });
       map.addLayer({
-          'id': 'tax',
+          'id': 'Tax Assessment',
           'type': 'circle',
-          'source': 'tax',
+          'source': 'Tax Assessment',
           'interactive': true,
           "layout": {
                     "text-font": "Open Sans Semibold, Arial Unicode MS Bold",
@@ -305,7 +297,7 @@
                   ["get", "Blue"]
               ]
           },
-          'source-layer': 'AllPointsGeoJSON-5mv4rv'
+          'source-layer': 'AllPointsGeoJSON-12eyog'
       });
   });
 
@@ -315,7 +307,7 @@
   });
 
   // link layers to buttons
-  var toggleableLayerIds = [ 'permits', 'tax' ];
+  var toggleableLayerIds = [ 'Tax Assessment' ];
 
   for (var i = 0; i < toggleableLayerIds.length; i++) {
       var id = toggleableLayerIds[i];

@@ -91,14 +91,14 @@
           }
       });
       // tax layer
-      map.addSource('tax', {
+      map.addSource('Tax Assessment', {
           type: 'vector',
-          url: 'mapbox://annabelrothschild.7wx31rzw'
+          url: 'mapbox://annabelrothschild.4lnspuic'
       });
       map.addLayer({
-          'id': 'tax',
+          'id': 'Tax Assessment',
           'type': 'circle',
-          'source': 'tax',
+          'source': 'Tax Assessment',
           'interactive': true,
           "layout": {
                     "text-font": "Open Sans Semibold, Arial Unicode MS Bold",
@@ -117,7 +117,7 @@
                   ["get", "Blue"]
               ]
           },
-          'source-layer': 'AllPointsGeoJSON-5mv4rv'
+          'source-layer': 'AllPointsGeoJSON-12eyog'
       });
   });
 
