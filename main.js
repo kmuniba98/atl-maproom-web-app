@@ -34,6 +34,11 @@ app.get('/projector.html', function(req, res){
   res.sendFile(__dirname + '/projector.html');
 });
 
+app.get('/table.html', function(req, res){
+  console.log("here")
+  res.sendFile(__dirname + '/table.html');
+});
+
 io.on('connection', function (socket) {
 
   socket.emit('news', { hello: 'world' });
@@ -46,6 +51,24 @@ io.on('connection', function (socket) {
     console.log("Broadcasting map update...");
     socket.broadcast.emit('pushLocUpdate', data)
   });
+
+  //Added by Annabel
+
+  socket.on('reQueryFeatures', function (data) {
+    socket.broadcast.emit("reQueryFeatures", data);
+  });
+
+  socket.on('newMarker', function (data) {
+    socket.broadcast.emit("newMarker", data);
+  });
+
+  socket.on('removeMarker', function(data){
+    socket.broadcast.emit("removeMarker", data);
+  });
+
+  /*socket.on('selectPTProjector', function(data){
+    socket.broadcast.emit("sendSelectedProjector", data);
+  });*/
 
   // added by Muniba
   socket.on('hideLayer', function(data) {
