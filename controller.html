@@ -165,7 +165,9 @@
 
   <script>
 
-  var socket = io('http://128.61.54.6:8080');
+  var SPoints = [];
+
+  var socket = io('http://128.61.121.12:8080');
 
   // set initial values for global variables
   var activeRectangle = document.getElementById("shortRect");
@@ -173,8 +175,32 @@
   var rectHeight = 300;
 
   socket.on('pushLocUpdate', function(data) {
-    console.log("I UPDATED")
-  })
+    console.log("I UPDATED");
+  });
+
+  //Added by Annabel - manage highlighted points
+  socket.on('removeMarker', function(data){
+    var index = SPoints.indexOf(map.queryRenderedFeatures({layers:['Tax Assessment']})[parseInt(data['removeMarker'])].properties.ID);
+    if (index > -1){
+      SPoints.splice(index, 1);
+    }
+    if (SPoints.length > 0){
+      var filter2 = ['match', ['get', 'ID'], SPoints, true, false];
+      map.setFilter("place-highlight", filter2);
+    }
+    else{
+      var filter1 = ['==', 'ID', -1];
+      map.setFilter("place-highlight", filter1);
+    };
+  });
+
+  socket.on('newMarker', function(data) {
+    var current = map.queryRenderedFeatures({layers:['Tax Assessment']})[parseInt(data['newMarker'])];
+    SPoints.unshift(current.properties.ID);
+    var filter = ['match', ['get', 'ID'], SPoints, true, false];
+    map.setFilter("place-highlight", filter);
+  });
+
 
   mapboxgl.accessToken = 'pk.eyJ1IjoibW9kZXJubG92ZWxhY2UiLCJhIjoiY2pmY24zNzhmM2VmaTJ4cDRlNmVoa24wdCJ9.7GBTZc76YFp947kU7A14Gg';
 
@@ -304,6 +330,18 @@
           url: 'mapbox://annabelrothschild.4lnspuic'
       });
       map.addLayer({
+          'id': 'place-highlight',
+          'type': 'circle',
+          'source': 'Tax Assessment',
+          'source-layer': 'AllPointsGeoJSON-12eyog',
+          'paint': {
+            'circle-color': '#FADA5E',
+            'circle-radius': 20,
+            'circle-opacity': .5,
+          },
+          'filter': ['==', 'ID', -1]
+      });
+      map.addLayer({
           'id': 'Tax Assessment',
           'type': 'circle',
           'source': 'Tax Assessment',
@@ -334,6 +372,7 @@
         socket.emit('locUpdate', {'center': map.getCenter(), 'zoom': map.getZoom(),
                                   'bearing':map.getBearing(), 'geoCoordinates':getGeoCoordinates(),
                                   'activeRectangle':activeRectangle.id})
+        socket.emit("reQueryFeatures", {'features':map.queryRenderedFeatures({layers:['Tax Assessment']})});
   });
 
   // link layers to buttons

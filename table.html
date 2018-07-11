@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset=utf-8 />
+  <title>Controller</title>
+  <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+  <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+  <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+  <script src='https://api.mapbox.com/mapbox-gl-js/v0.46.0/mapbox-gl.js'></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <link href='https://api.mapbox.com/mapbox-gl-js/v0.46.0/mapbox-gl.css' rel='stylesheet' />
+
+</head>
+
+<body>
+
+    
+    <table id="table" class="display" style="width:100%">
+        <thead>
+            <tr>
+                <th>Address</th>
+                <th>2010 Assessment</th>
+                <th>2017 Assessment</th>
+                <th>% Change</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1158 Rosedale rd</td>
+                <td>100</td>
+                <td>300</td>
+                <td>200</td>
+            </tr>
+        </tbody>
+    </table>
+
+  <script>
+
+  var socket = io('http://128.61.121.12:8080');
+
+  function normalize(data) {
+    var result = [];
+    count = 0
+    for (var row in data) {
+        var address = data[row].properties["SITUS"];
+        var ten = data[row].properties["2010 Value"];
+        var seven = data[row].properties["2017 Value"];
+        var change = data[row].properties["CHANGE"];
+        
+        result.push([address, ten, seven, change]);
+    }
+    return result;
+  }
+
+
+  socket.on('reQueryFeatures', function(data) {    
+    $("table").DataTable().destroy();
+    var datatable = $("table").DataTable({
+        "aaData":normalize(data.features),
+        "aoColums":[
+            {title: "Address", data: "SITUS"},
+            {title: "2010 Assessment", data: "2010 Value"},
+            {title: "2017 Assessment", data: "2017 Value"},
+            {title: "% Change", data: "CHANGE"},
+        ],
+        "info":false,
+        "lengthChange": false,
+        "paging": false,
+        "order":[],
+    });
+  });
+      
+      
+  $(document).ready( function () {
+    $('table').DataTable({
+        "info":false,
+        "lengthChange": false,
+        "paging": false,
+        "display": true,
+  });
+       
+ 
+    $('table tbody').on( 'click', 'tr', function () {
+      $(this).toggleClass('selected');
+      var tab = $('table').DataTable();
+      if ($(this).hasClass('selected')){
+        socket.emit("newMarker", {'newMarker':tab.row(this).index()});
+      }
+      else{
+        socket.emit("removeMarker", {'removeMarker':tab.row(this).index()});
+      };
+    } );
+
+  }); 
+    </script>
+
+</body>
+
+
+</html>
