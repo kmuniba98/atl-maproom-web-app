@@ -47,32 +47,13 @@ io.on('connection', function (socket) {
     socket.broadcast.emit('pushLocUpdate', data)
   });
 
-  // added by Muniba
   socket.on('hideLayer', function(data) {
     console.log(data.clickedLayer + " Layer hidden");
     socket.broadcast.emit('pushHideLayer', data)
   });
+  
   socket.on('showLayer', function(data) {
     console.log(data.clickedLayer + " Layer shown");
     socket.broadcast.emit('pushShowLayer', data) // will emit to client that didn't send
   });
-  socket.on('changeSize', function(data) {  // for toggleRectangle
-    console.log(data.activeRectangle + " size selected");
-    socket.broadcast.emit('pushChangeSize', data);
-  })
 });
-
-/*
-
-mapboxgl.accessToken = 'pk.eyJ1IjoiY2Zwb2xhY2siLCJhIjoiY2ppb3RlMXBiMGRjdzN2dDk3eWI2cmVkbyJ9.amywF3L9CAgcjl3GeFHb4g';
-
-var mapA = new mapboxgl.Map({
-  container: 'mapA', // container id
-  style:'mapbox://styles/cfpolack/cjiugdneq69l72rqo4wzuixpw'
-});
-
-var mapB = new mapboxgl.Map({
-  container: 'mapB', // container id
-  style:'mapbox://styles/cfpolack/cjiugdneq69l72rqo4wzuixpw'
-});
-*/

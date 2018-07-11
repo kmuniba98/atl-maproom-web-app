@@ -21,6 +21,7 @@
   <script>
 
   var socket = io('http://128.61.54.6:8080');
+  var geoCoordinates =
 
   socket.on('pushLocUpdate', function(data) {
     console.log("Controller changed...");
@@ -52,24 +53,6 @@
   });
 
   map.on('load', function () {
-      // permit layer
-      map.addSource('permits', {
-          type: 'vector',
-          url: 'mapbox://modernlovelace.cjiqeva5803dtfrrvg9g78mzz-7xosm'
-      });
-      map.addLayer({
-          'id': 'permits',
-          'type': 'circle',
-          'source': 'permits',
-          'layout': {
-              'visibility': 'none'
-          },
-          'paint': {
-              'circle-radius': 8,
-              'circle-color': 'blue'
-          },
-          'source-layer': 'commercial_land_development_2017'
-      });
       // beltline layer
       map.addSource('beltline', {
           type: 'vector',
