@@ -4,7 +4,7 @@ var io = require('socket.io-client')
 var PythonShell = require('python-shell');
 
 
-var socket = io.connect('http://143.215.119.183:8080');
+var socket = io.connect('http://maproom.lmc.gatech.edu:8080');
 socket.on('connect', function () {
   socket.emit('sensorConnected', "Success");
 });
