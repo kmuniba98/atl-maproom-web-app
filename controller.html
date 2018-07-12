@@ -80,7 +80,7 @@
 
   <script>
 
-  var socket = io('http://143.215.119.183:8080');
+  var socket = io('http://maproom.lmc.gatech.edu:8080');
 
   socket.on('pushSensorUpdate', function(data) {
     console.log("New sensor reading: " + data.distance)

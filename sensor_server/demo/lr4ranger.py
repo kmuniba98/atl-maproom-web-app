@@ -18,6 +18,9 @@ import os
 library_path = os.path.abspath(os.path.dirname(__file__) +
     '/../src/liblr4ranger.so.1')
 
+fout = open("data.txt","w+")
+fid = fout.fileno()
+
 #
 # load the lr4ranger dynamic library.
 #
@@ -32,11 +35,16 @@ if result != 0:
     print 'Failed to open ranger: ' + str(result)
     sys.exit(1)
 
-#
-# Get a single range
-#
+# Start collecting
+
+print (lr4ranger_lib.lr4ranger_start_collecting(ctypes.byref(handle), fid, 1))
+
+time.sleep(20)
+
+fout.close()
 
 
+"""
 for i in range (1000):
     range = ctypes.c_int()
     result = lr4ranger_lib.lr4ranger_get_range(handle, ctypes.byref(range))
@@ -52,7 +60,7 @@ for i in range (1000):
 
 
 
-
+"""
 
 """
 

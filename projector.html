@@ -20,9 +20,12 @@
 
   <script>
 
-  var leftLong, rightLong, lowerLat, upperLat, mapBearing, mapZoom, mapCenter
+  var leftLong, rightLong, lowerLat, upperLat
+  var mapBearing = 0
+  var mapZoom = 1
+  var mapCenter = [1,1]
 
-  var socket = io('http://143.215.119.183:8080');
+  var socket = io('http://maproom.lmc.gatech.edu:8080');
 
   socket.on('pushMapUpdate', function(data) {
     console.log("Controller changed, updating map...");
@@ -48,20 +51,23 @@
     var leftLong = -84.44333855642014;
     var rightLong = -84.27173029708604
 
-    var start = 3750
+    var start = 3300
     var end = 5350
 
-    curRatio = ((data.distance) / (end-start))
+    curRatio = ((data.distance - start) / (end-start))
 
     //curLat = lowerLat + (curRatio * (upperLat - lowerLat))
     curLong = leftLong + (curRatio * (rightLong - leftLong))
 
-    console.log("Current position number is " + curRatio)
+    console.log("Current position is " + data.distance)
+    console.log("Current ratio is " + curRatio)
     console.log("Moving to " + curLong)
 
-    newCenter = {lng: curLong, lat: 33.76777287243536}
+    newCenter = [curLong, 33.76777287243536]
 
-    //map.easeTo({center: newCenter, zoom:mapZoom, bearing:mapBearing})
+    console.log(newCenter + " " + mapZoom + " " + mapBearing)
+
+    map.easeTo({center: newCenter})
 
   });
 

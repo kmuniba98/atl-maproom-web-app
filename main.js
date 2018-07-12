@@ -21,6 +21,7 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 
 app.get('/', function(req, res) {
+  console.log("received request")
   res.sendFile(__dirname + '/index.html');
 });
 
