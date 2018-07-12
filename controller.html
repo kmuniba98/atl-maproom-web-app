@@ -181,6 +181,7 @@
   //Added by Annabel - manage highlighted points
   socket.on('removeMarker', function(data){
     var index = SPoints.indexOf(map.queryRenderedFeatures({layers:['Tax Assessment']})[parseInt(data['removeMarker'])].properties.ID);
+    console.log(index);
     if (index > -1){
       SPoints.splice(index, 1);
     }
@@ -192,13 +193,16 @@
       var filter1 = ['==', 'ID', -1];
       map.setFilter("place-highlight", filter1);
     };
+    socket.emit("removeFromProjector", index);
   });
 
   socket.on('newMarker', function(data) {
     var current = map.queryRenderedFeatures({layers:['Tax Assessment']})[parseInt(data['newMarker'])];
+    console.log(current.properties.ID);
     SPoints.unshift(current.properties.ID);
     var filter = ['match', ['get', 'ID'], SPoints, true, false];
     map.setFilter("place-highlight", filter);
+    socket.emit('addToProjector', current);
   });
 
 
@@ -327,13 +331,13 @@
       // tax layer
       map.addSource('Tax Assessment', {
           type: 'vector',
-          url: 'mapbox://annabelrothschild.4lnspuic'
+          url: 'mapbox://annabelrothschild.b0bkjxyd'
       });
       map.addLayer({
           'id': 'place-highlight',
           'type': 'circle',
           'source': 'Tax Assessment',
-          'source-layer': 'AllPointsGeoJSON-12eyog',
+          'source-layer': 'AllPointsGeoJSONFinal-5o9fu4',
           'paint': {
             'circle-color': '#FADA5E',
             'circle-radius': 20,
@@ -363,7 +367,7 @@
                   ["get", "Blue"]
               ]
           },
-          'source-layer': 'AllPointsGeoJSON-12eyog'
+          'source-layer': 'AllPointsGeoJSONFinal-5o9fu4'
       });
   });
 

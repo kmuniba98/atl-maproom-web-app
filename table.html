@@ -3,7 +3,7 @@
 
 <head>
   <meta charset=utf-8 />
-  <title>Controller</title>
+  <title>Table</title>
   <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
   <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
   <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
@@ -20,18 +20,26 @@
     <table id="table" class="display" style="width:100%">
         <thead>
             <tr>
+                <th>ID</th>
                 <th>Address</th>
                 <th>2010 Assessment</th>
                 <th>2017 Assessment</th>
-                <th>% Change</th>
+                <th>Assessment Change</th>
+                <th>2010 Appraisal</th>
+                <th>2017 Appraisal</th>
+                <th>Appraisal Change</th>
             </tr>
         </thead>
         <tbody>
             <tr>
-                <td>1158 Rosedale rd</td>
-                <td>100</td>
-                <td>300</td>
-                <td>200</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
             </tr>
         </tbody>
     </table>
@@ -45,14 +53,18 @@
     count = 0
     for (var row in data) {
         var address = data[row].properties["SITUS"];
-        var ten = data[row].properties["2010 Value"];
-        var seven = data[row].properties["2017 Value"];
-        var change = data[row].properties["CHANGE"];
+        var tenAssess = data[row].properties["2010_assessment"];
+        var sevenAssess = data[row].properties["2017_assessment"];
+        var changeAssess = data[row].properties["assess_change"];
+        var tenAppr = data[row].properties["2010_appr"];
+        var sevenAppr = data[row].properties["2017_appr"];
+        var changeAppr = data[row].properties["appr_change"];
+        var ID = data[row].properties["ID"];
         
-        result.push([address, ten, seven, change]);
+        result.push([ID, address, tenAssess, sevenAssess, changeAssess, tenAppr, sevenAppr, changeAppr]);
     }
     return result;
-  }
+  };
 
 
   socket.on('reQueryFeatures', function(data) {    
@@ -60,10 +72,14 @@
     var datatable = $("table").DataTable({
         "aaData":normalize(data.features),
         "aoColums":[
+            {title: "ID", data: "ID"},
             {title: "Address", data: "SITUS"},
-            {title: "2010 Assessment", data: "2010 Value"},
-            {title: "2017 Assessment", data: "2017 Value"},
-            {title: "% Change", data: "CHANGE"},
+            {title: "2010 Assessment", data: "2010_assessment"},
+            {title: "2017 Assessment", data: "2017_assessment"},
+            {title: "Assessment Change", data: "assess_change"},
+            {title: "2010 Appraisal", data: "2010_appr"},
+            {title: "2017 Appraisal", data: "2017_appr"},
+            {title: "Appraisal Change", data: "appr_change"},
         ],
         "info":false,
         "lengthChange": false,
@@ -81,19 +97,30 @@
         "display": true,
   });
        
- 
+  var currClick = -1;
     $('table tbody').on( 'click', 'tr', function () {
-      $(this).toggleClass('selected');
       var tab = $('table').DataTable();
       if ($(this).hasClass('selected')){
-        socket.emit("newMarker", {'newMarker':tab.row(this).index()});
+        $(this).removeClass('selected');
+          socket.emit("removeMarker", {'removeMarker':tab.row(this).index()});
+        currClick = -1;
+        console.log("resetting currClick");
       }
       else{
-        socket.emit("removeMarker", {'removeMarker':tab.row(this).index()});
-      };
-    } );
+          console.log(currClick);
 
+          if (currClick != -1){
+              socket.emit("removeMarker", {'removeMarker':currClick});
+          };
+          //need to remove from selected class
+          tab.$('tr.selected').removeClass('selected');
+          currClick = tab.row(this).index();
+          console.log(currClick);
+          $(this).addClass('selected');
+          socket.emit("newMarker", {'newMarker':tab.row(this).index()});
+      }
   }); 
+  });
     </script>
 
 </body>

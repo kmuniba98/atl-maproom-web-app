@@ -64,6 +64,14 @@ io.on('connection', function (socket) {
     socket.broadcast.emit("removeMarker", data);
   });
 
+  socket.on("addToProjector", function(data){
+    socket.broadcast.emit("addToProjector", data);
+  });
+
+  socket.on("removeFromProjector", function(data){
+    socket.broadcast.emit("removeFromProjector", data);
+  });
+
   /*socket.on('selectPTProjector', function(data){
     socket.broadcast.emit("sendSelectedProjector", data);
   });*/
