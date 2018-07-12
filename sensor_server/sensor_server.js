@@ -4,13 +4,13 @@ var io = require('socket.io-client')
 var PythonShell = require('python-shell');
 
 
-var socket = io.connect('http://localhost:8080');
+var socket = io.connect('http://143.215.119.183:8080');
 socket.on('connect', function () {
   socket.emit('sensorConnected', "Success");
 });
 
-
-var pyshell = new PythonShell('demo/lr4ranger.py');
+console.log("Running sensor server...");
+var pyshell = new PythonShell('lr4.py');
 
 pyshell.on('message', function (message) {
   // received a message sent from the Python script (a simple "print" statement)
