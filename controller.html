@@ -167,7 +167,7 @@
 
   var SPoints = [];
 
-  var socket = io('http://128.61.121.12:8080');
+  var socket = io('http://128.61.54.6:8080');
 
   // set initial values for global variables
   var activeRectangle = document.getElementById("shortRect");
@@ -237,9 +237,24 @@
     var ul = map.unproject(pixelCoordinates.ul);
     var br = map.unproject(pixelCoordinates.br);
     var bl = map.unproject(pixelCoordinates.bl);
-    // return an json of geographic coordinates
-    var geoCoordinates = {"ur":ur, "ul":ul, "br":br, "bl":bl};
-    return geoCoordinates;
+    // return a json of geographic coordinates
+    return {"ur":ur, "ul":ul, "br":br, "bl":bl};
+  }
+
+  // function to get the right & left center
+  function getEndCenters(){
+    var height = rectHeight;
+    // get upper right & upper left pixels
+    var pixelCoordinates = getPixelCoordinates();
+    var ur = pixelCoordinates.ur;
+    var ul = pixelCoordinates.ul;
+    // calculate pixel coordinates for right & left center
+    var rcPixel = {"x":(ur.x - height/2), "y":(ur.y + height/2)};
+    var lcPixel = {"x":(ul.x + height/2), "y":(ul.y + height/2)};
+    var rc = map.unproject(rcPixel);
+    var lc = map.unproject(lcPixel);
+    // return a json of geographic coordinates
+    return {"rc":rc, "lc":lc};
   }
 
   // function to toggle rectangle
@@ -266,14 +281,14 @@
     console.log("Sending rectangle change to server...")
     socket.emit('locUpdate', {'center': map.getCenter(), 'zoom': map.getZoom(),
                               'bearing':map.getBearing(), 'geoCoordinates':getGeoCoordinates(),
-                              'activeRectangle':activeRectangle.id})
+                              'activeRectangle':activeRectangle.id, 'endCenters':getEndCenters()})
   });
   document.getElementById('projectButton').addEventListener('click', function () {
     project();
   });
 
   function project(){
-    var stage = getActiveRect(), // get canvas element by Id
+    var stage = activeRectangle, // get canvas element by Id
           ctx = stage.getContext('2d'), // canvas 2d rendering context
           x = 0, // intial horizontal position of drawn rectangle
           y = 0, // intial vertical position of drawn rectangle
@@ -371,7 +386,7 @@
         console.log("Sending move change to server...")
         socket.emit('locUpdate', {'center': map.getCenter(), 'zoom': map.getZoom(),
                                   'bearing':map.getBearing(), 'geoCoordinates':getGeoCoordinates(),
-                                  'activeRectangle':activeRectangle.id})
+                                  'activeRectangle':activeRectangle.id, 'endCenters':getEndCenters()})
         socket.emit("reQueryFeatures", {'features':map.queryRenderedFeatures({layers:['Tax Assessment']})});
   });
 
