@@ -3,6 +3,7 @@
 
 <head>
   <meta charset=utf-8 />
+  <title>Projector</title>
   <script src='https://api.mapbox.com/mapbox-gl-js/v0.46.0/mapbox-gl.js'></script>
   <script src="/socket.io/socket.io.js"></script>
   <link href='https://api.mapbox.com/mapbox-gl-js/v0.46.0/mapbox-gl.css' rel='stylesheet' />
@@ -14,16 +15,60 @@
 
 <body>
   <style>
+      @import url('https://fonts.googleapis.com/css?family=PT+Mono|PT+Serif');
+
+        h6 {
+            font-family: 'PT Mono', monospace;
+            padding-left: 80%;
+            line-height: 13px; 
+            font-size: 10px;
+            padding-bottom: 17px;
+        }
+
+        h5 {
+            font-family: 'PT Serif', serif;;
+            padding-left: 80%;
+            line-height: 10px;
+            font-size: 12px;
+        }
+        span {
+          padding-top: 0px;
+          padding-bottom: 0px;
+          margin-bottom: 0px;
+          margin-top: 0px;
+          line-height: 10px;
+        }
   </style>
 
   <div id='map'></div>
-
+  <div id="point_text" style="max-height:100%">
+    <h5 id="address_text">Address</h5>
+    <h6 id="address">Address</h6><span></span>
+    <h5 id="assess_text_10">2010 Assessment</h5>
+    <h6 id="tenAssess">2010 Assessment</h6><span></span>
+    <h5 id="assess_text_17">2017 Assessment</h5>
+    <h6 id="sevenAssess">2017 Assessment</h6><span></span>
+    <h5 id="assess_change_text">Assessment Percent Change</h5>
+    <h6 id="assess_change">Assessment Percent Change</h6><span></span>
+    <h5 id="appr_text_10">2010 Appraisal</h5>
+    <h6 id="tenAppr">2010 Appraisal</h6><span></span>
+    <h5 id="appr_text_17">2017 Appraisal</h5>
+    <h6 id="sevenAppr">2017 Appraisal</h6><span></span>
+    <h5 id="appr_change_text">Appraisal Percent Change</h5>
+    <h6 id="appr_change">Appraisal Percent Change</h6>
+  </div>
   <script>
 
+<<<<<<< HEAD
   var leftLong, rightLong, lowerLat, upperLat
   var mapBearing = 0
   var mapZoom = 1
   var mapCenter = [1,1]
+=======
+  var socket = io('http://128.61.121.12:8080');
+
+  var SPoints = [];
+>>>>>>> master
 
   var socket = io('http://maproom.lmc.gatech.edu:8080');
 
@@ -80,6 +125,50 @@
     var shownLayer = data['clickedLayer'];
     map.setLayoutProperty(shownLayer, 'visibility', 'visible');
   });
+  socket.on('pushChangeSize', function(data){ // for toggleRectangle
+
+  });
+
+    //Added by Annabel - manage highlighted points
+  socket.on('removeFromProjector', function(data){
+    console.log(index);
+    var index = data; //SPoints.indexOf(map.queryRenderedFeatures({layers:['Tax Assessment']})[parseInt(data['removeMarker'])].properties.ID);
+    if (index > -1){
+        SPoints.splice(index, 1);
+    }
+    if (SPoints.length > 0){
+      var filter2 = ['match', ['get', 'ID'], SPoints, true, false];
+      map.setFilter("place-highlight", filter2);
+    }
+    else{
+      var filter1 = ['==', 'ID', -1];
+      map.setFilter("place-highlight", filter1);
+    };
+  });
+
+  socket.on('addToProjector', function(data) {
+    var current = data; //map.queryRenderedFeatures({layers:['Tax Assessment']})[parseInt(data['newMarker'])];
+    SPoints.unshift(current.properties.ID);
+    var filter = ['match', ['get', 'ID'], SPoints, true, false];
+    map.setFilter("place-highlight", filter);
+    console.log(current.properties.ID);
+    console.log(current);
+    
+    if (current.properties['2010_assessment'] > 100){
+        console.log(current.properties['2010_assessment'].toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
+        console.log(current.properties['2010_assessment'].toLocaleString());
+    }
+      
+    document.getElementById("address").innerHTML = current.properties['SITUS'];
+    document.getElementById("tenAssess").innerHTML = ("$" + current.properties['2010_assessment'].toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
+    document.getElementById("sevenAssess").innerHTML = ("$" + current.properties['2017_assessment'].toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
+    document.getElementById("assess_change").innerHTML = (current.properties['assess_change'].toLocaleString() +"%");
+    document.getElementById("tenAppr").innerHTML = ("$" + current.properties['2010_appr'].toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
+    document.getElementById("sevenAppr").innerHTML = ("$" + current.properties['2017_appr'].toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
+    document.getElementById("appr_change").innerHTML = (current.properties['appr_change'] + "%");
+      
+  });
+
 
   mapboxgl.accessToken = 'pk.eyJ1IjoibW9kZXJubG92ZWxhY2UiLCJhIjoiY2pmY24zNzhmM2VmaTJ4cDRlNmVoa24wdCJ9.7GBTZc76YFp947kU7A14Gg';
 
@@ -89,24 +178,6 @@
   });
 
   map.on('load', function () {
-      // permit layer
-      map.addSource('permits', {
-          type: 'vector',
-          url: 'mapbox://modernlovelace.cjiqeva5803dtfrrvg9g78mzz-7xosm'
-      });
-      map.addLayer({
-          'id': 'permits',
-          'type': 'circle',
-          'source': 'permits',
-          'layout': {
-              'visibility': 'visible'
-          },
-          'paint': {
-              'circle-radius': 8,
-              'circle-color': 'blue'
-          },
-          'source-layer': 'commercial_land_development_2017'
-      });
       // beltline layer
       map.addSource('beltline', {
           type: 'vector',
@@ -123,9 +194,50 @@
               'line-cap': 'round'
           },
           'paint': {
-              'line-color': 'purple',
+              'line-color': 'yellow green',
               'line-width': 8
           }
+      });
+      // tax layer
+      map.addSource('Tax Assessment', {
+          type: 'vector',
+          url: 'mapbox://annabelrothschild.b0bkjxyd'
+      });
+      map.addLayer({
+          'id': 'place-highlight',
+          'type': 'circle',
+          'source': 'Tax Assessment',
+          'source-layer': 'AllPointsGeoJSONFinal-5o9fu4',
+          'paint': {
+            'circle-color': '#FADA5E',
+            'circle-radius': 20,
+            'circle-opacity': .5,
+          },
+          'filter': ['==', 'ID', -1]
+      });
+      map.addLayer({
+          'id': 'Tax Assessment',
+          'type': 'circle',
+          'source': 'Tax Assessment',
+          'interactive': true,
+          "layout": {
+                    "text-font": "Open Sans Semibold, Arial Unicode MS Bold",
+                    "text-offset": [0, 0.6],
+                    "text-anchor": "top"
+                  },
+          'layout': {
+              'visibility': 'none'
+          },
+          'paint': {
+              'circle-radius': 3,
+              'circle-color': [
+                  "rgb",
+                  ["get", "Red"],
+                  ["get", "Green"],
+                  ["get", "Blue"]
+              ]
+          },
+          'source-layer': 'AllPointsGeoJSONFinal-5o9fu4'
       });
   });
 
