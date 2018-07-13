@@ -16,7 +16,7 @@
 
 <body>
 
-    
+
     <table id="table" class="display" style="width:100%">
         <thead>
             <tr>
@@ -46,7 +46,7 @@
 
   <script>
 
-  var socket = io('http://128.61.121.12:8080');
+  var socket = io('http://maproom.lmc.gatech.edu:8080');
 
   function normalize(data) {
     var result = [];
@@ -60,14 +60,14 @@
         var sevenAppr = data[row].properties["2017_appr"];
         var changeAppr = data[row].properties["appr_change"];
         var ID = data[row].properties["ID"];
-        
+
         result.push([ID, address, tenAssess, sevenAssess, changeAssess, tenAppr, sevenAppr, changeAppr]);
     }
     return result;
   };
 
 
-  socket.on('reQueryFeatures', function(data) {    
+  socket.on('reQueryFeatures', function(data) {
     $("table").DataTable().destroy();
     var datatable = $("table").DataTable({
         "aaData":normalize(data.features),
@@ -87,8 +87,8 @@
         "order":[],
     });
   });
-      
-      
+
+
   $(document).ready( function () {
     $('table').DataTable({
         "info":false,
@@ -96,7 +96,7 @@
         "paging": false,
         "display": true,
   });
-       
+
   var currClick = -1;
     $('table tbody').on( 'click', 'tr', function () {
       var tab = $('table').DataTable();
@@ -119,7 +119,7 @@
           $(this).addClass('selected');
           socket.emit("newMarker", {'newMarker':tab.row(this).index()});
       }
-  }); 
+  });
   });
     </script>
 
