@@ -407,7 +407,7 @@
 
   map.on('moveend', function (e) {
         console.log("Sending move change to server...")
-        socket.emit('locUpdate', {'center': map.getCenter(), 'zoom': map.getZoom(),
+        socket.emit('mapUpdate', {'center': map.getCenter(), 'zoom': map.getZoom(),
                                   'bearing':map.getBearing(), 'geoCoordinates':getGeoCoordinates(),
                                   'activeRectangle':activeRectangle.id, 'endCenters':getEndCenters()})
         socket.emit("reQueryFeatures", {'features':map.queryRenderedFeatures({layers:['Tax Assessment']})});
