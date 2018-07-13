@@ -66,6 +66,8 @@
   var SPoints = [];
   var socket = io('http://maproom.lmc.gatech.edu:8080');
 
+  mapboxgl.accessToken = 'pk.eyJ1IjoiYW5uYWJlbHJvdGhzY2hpbGQiLCJhIjoiY2ppNG83M2g1MGI5eTNrcWNyM200cTRteSJ9.zRuYJ-Yr1TcsgkM06jx5rg';
+
   socket.on('pushMapUpdate', function(data) {
     console.log("Controller changed, updating map...");
 
@@ -164,7 +166,7 @@
   });
 
 
-  mapboxgl.accessToken = 'pk.eyJ1IjoiYW5uYWJlbHJvdGhzY2hpbGQiLCJhIjoiY2ppNG83M2g1MGI5eTNrcWNyM200cTRteSJ9.zRuYJ-Yr1TcsgkM06jx5rg';
+
 
   var map = new mapboxgl.Map({
     container: 'map', // container id
