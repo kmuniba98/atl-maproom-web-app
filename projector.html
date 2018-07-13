@@ -81,7 +81,7 @@
     lowerLat = data['lowerLat'];
     upperLat = data['upperLat'];
 
-    map.easeTo({center: mapCenter, zoom:(mapZoom*1.1), bearing:mapBearing})
+    map.easeTo({center: mapCenter, zoom:(mapZoom*1.2), bearing:mapBearing})
   });
 
   socket.on('pushSensorUpdate', function(data) {
@@ -90,13 +90,13 @@
     var leftLong = -84.44333855642014;
     var rightLong = -84.27173029708604
 
-    var start = 3300
-    var end = 5350
+    var start = 2025
+    var end = 4721
 
     curRatio = ((data.distance - start) / (end-start))
 
     //curLat = lowerLat + (curRatio * (upperLat - lowerLat))
-    curLong = leftLong + (curRatio * (rightLong - leftLong))
+    //curLong = leftLong + (curRatio * (rightLong - leftLong))
 
     console.log("Current position is " + data.distance)
     console.log("Current ratio is " + curRatio)

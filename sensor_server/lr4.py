@@ -44,13 +44,13 @@ class LR4(object):
   def _getDevices():
     return map(LR4,list(usb.core.find(find_all=True,idVendor=LR4.ID_VENDOR, idProduct=LR4.ID_PRODUCT)))
 
-  
+
   @staticmethod
   def listDevices():
     return LR4._getDevices()
 
   '''
-  get device 
+  get device
   :param serial: the serial number of the device (string).  If not specified, returns the first device found
   : returns LR4: lr4 object, or None if no match was found
   '''
@@ -64,7 +64,7 @@ class LR4(object):
         device=None
         for dev in devices:
           if (str(dev.getSerialNumber().strip()) == str(serialNum.strip())):
-            device=dev 
+            device=dev
             break
           else:
             dev.close()
@@ -108,7 +108,7 @@ class LR4(object):
   '''
   def _write(self,arr):
     return self.usbDevice.write(LR4.ENDPOINT_OUT,bytearray(arr))
- 
+
   '''
   Read in configuration data from the LR4
   '''
@@ -131,7 +131,7 @@ class LR4(object):
     self._readConfig()
     #occasionally it seems to get misconfigured?
     # note that equality of cmd and config hinges on the first byte being the same, which is coincidental, but convenient
-    while (cmd != self.config): 
+    while (cmd != self.config):
       self._write(cmd)
       self._readConfig()
       time.sleep(0.5)
@@ -151,7 +151,7 @@ class LR4(object):
     cmd[0] = LR4.CMD_WRITE_CONFIG
     self._write(cmd)
 
-  
+
   '''
   get Serial Number from device
   :returns: serial number string
@@ -170,7 +170,7 @@ class LR4(object):
     res = res1[2:] + res2[2:5]
     serialNum = ''.join(map(chr,res))
     return serialNum.rstrip(' \t\r\n\0')
-      
+
   '''
   begin a distance measurement
   '''
@@ -181,12 +181,12 @@ class LR4(object):
   '''
   end a distance measurement
   '''
-  def _endMeasurement(self):  
+  def _endMeasurement(self):
     cmd = [LR4.CMD_SET_CONFIG,self.config[1],self.config[2] & ~0x80,self.config[3],self.config[4],0,0,0]
     self._write(cmd)
 
   '''
-  measure - return a measurement 
+  measure - return a measurement
   :returns: distance in mm, integer value
   '''
   def measure(self):
@@ -208,7 +208,7 @@ def testOutput(dev):
         print dev.measure()
 	sys.stdout.flush()
     except Exception as e:
-      print "\terr" 
+      excep = 0 
 
 
 '''
@@ -221,7 +221,7 @@ def testMultiDevices():
     if dev is not None:
       testOutput(dev)
       dev.close()
-  
+
 '''
 test ability to retrieve single device
 '''
@@ -243,7 +243,6 @@ if __name__=="__main__":
   #print "test single device, auto"
   #testSingleDevice()
   #print "test single device, specified"
-  
+
   #print "test multiple devices"
   #testMultiDevices()
-
