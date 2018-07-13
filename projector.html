@@ -20,37 +20,43 @@
         h6 {
             font-family: 'PT Mono', monospace;
             padding-left: 80%;
-            line-height: 5px;
+            line-height: 13px; 
+            font-size: 10px;
+            padding-bottom: 17px;
         }
 
         h5 {
             font-family: 'PT Serif', serif;;
             padding-left: 80%;
             line-height: 10px;
-            margin-top: 10px;
+            font-size: 12px;
         }
-        
-        br {
-            line-height:  0px;
+        span {
+          padding-top: 0px;
+          padding-bottom: 0px;
+          margin-bottom: 0px;
+          margin-top: 0px;
+          line-height: 10px;
         }
   </style>
 
   <div id='map'></div>
+  <div id="point_text" style="max-height:100%">
     <h5 id="address_text">Address</h5>
-    <h6 id="address">Address</h6><br>
+    <h6 id="address">Address</h6><span></span>
     <h5 id="assess_text_10">2010 Assessment</h5>
-    <h6 id="tenAssess">2010 Assessment</h6><br>
+    <h6 id="tenAssess">2010 Assessment</h6><span></span>
     <h5 id="assess_text_17">2017 Assessment</h5>
-    <h6 id="sevenAssess">2017 Assessment</h6><br>
+    <h6 id="sevenAssess">2017 Assessment</h6><span></span>
     <h5 id="assess_change_text">Assessment Percent Change</h5>
-    <h6 id="assess_change">Assessment Percent Change</h6><br>
+    <h6 id="assess_change">Assessment Percent Change</h6><span></span>
     <h5 id="appr_text_10">2010 Appraisal</h5>
-    <h6 id="tenAppr">2010 Appraisal</h6><br>
+    <h6 id="tenAppr">2010 Appraisal</h6><span></span>
     <h5 id="appr_text_17">2017 Appraisal</h5>
-    <h6 id="sevenAppr">2017 Appraisal</h6><br>
+    <h6 id="sevenAppr">2017 Appraisal</h6><span></span>
     <h5 id="appr_change_text">Appraisal Percent Change</h5>
     <h6 id="appr_change">Appraisal Percent Change</h6>
-    
+  </div>
   <script>
 
   var socket = io('http://128.61.121.12:8080');
@@ -110,12 +116,12 @@
     }
       
     document.getElementById("address").innerHTML = current.properties['SITUS'];
-    document.getElementById("tenAssess").innerHTML = ("$" + current.properties['2010_assessment'].toLocaleString());
-    document.getElementById("sevenAssess").innerHTML = ("$" + current.properties['2017_assessment'].toLocaleString());
+    document.getElementById("tenAssess").innerHTML = ("$" + current.properties['2010_assessment'].toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
+    document.getElementById("sevenAssess").innerHTML = ("$" + current.properties['2017_assessment'].toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
     document.getElementById("assess_change").innerHTML = (current.properties['assess_change'].toLocaleString() +"%");
-    document.getElementById("tenAppr").innerHTML = ("$" + current.properties['2010_appr'].toLocaleString());
-    document.getElementById("sevenAppr").innerHTML = ("$" + current.properties['2017_appr'].toLocaleString());
-    document.getElementById("appr_change").innerHTML = (current.properties['appr_change'].toLocaleString() + "%");
+    document.getElementById("tenAppr").innerHTML = ("$" + current.properties['2010_appr'].toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
+    document.getElementById("sevenAppr").innerHTML = ("$" + current.properties['2017_appr'].toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
+    document.getElementById("appr_change").innerHTML = (current.properties['appr_change'] + "%");
       
   });
 
