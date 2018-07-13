@@ -45,9 +45,7 @@ io.on('connection', function (socket) {
     console.log("Map updated, pushing...");
 
     console.log(data.center)
-
-    var projectorPosition = 0.5;
-    data.projectorPosition = projectorPosition;
+    console.log(data.zoom)
 
     socket.broadcast.emit('pushMapUpdate', data)
   });
