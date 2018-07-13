@@ -20,7 +20,7 @@
         h6 {
             font-family: 'PT Mono', monospace;
             padding-left: 80%;
-            line-height: 13px; 
+            line-height: 13px;
             font-size: 10px;
             padding-bottom: 17px;
         }
@@ -59,17 +59,11 @@
   </div>
   <script>
 
-<<<<<<< HEAD
   var leftLong, rightLong, lowerLat, upperLat
   var mapBearing = 0
   var mapZoom = 1
   var mapCenter = [1,1]
-=======
-  var socket = io('http://128.61.121.12:8080');
-
   var SPoints = [];
->>>>>>> master
-
   var socket = io('http://maproom.lmc.gatech.edu:8080');
 
   socket.on('pushMapUpdate', function(data) {
@@ -153,12 +147,12 @@
     map.setFilter("place-highlight", filter);
     console.log(current.properties.ID);
     console.log(current);
-    
+
     if (current.properties['2010_assessment'] > 100){
         console.log(current.properties['2010_assessment'].toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
         console.log(current.properties['2010_assessment'].toLocaleString());
     }
-      
+
     document.getElementById("address").innerHTML = current.properties['SITUS'];
     document.getElementById("tenAssess").innerHTML = ("$" + current.properties['2010_assessment'].toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
     document.getElementById("sevenAssess").innerHTML = ("$" + current.properties['2017_assessment'].toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
@@ -166,7 +160,7 @@
     document.getElementById("tenAppr").innerHTML = ("$" + current.properties['2010_appr'].toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
     document.getElementById("sevenAppr").innerHTML = ("$" + current.properties['2017_appr'].toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
     document.getElementById("appr_change").innerHTML = (current.properties['appr_change'] + "%");
-      
+
   });
 
 
