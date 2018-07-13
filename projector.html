@@ -59,24 +59,68 @@
   </div>
   <script>
 
+<<<<<<< HEAD
+  var leftLong, rightLong, lowerLat, upperLat
+  var mapBearing = 0
+  var mapZoom = 1
+  var mapCenter = [1,1]
+=======
   var socket = io('http://128.61.121.12:8080');
 
   var SPoints = [];
+>>>>>>> master
 
-  socket.on('pushLocUpdate', function(data) {
-    console.log("Controller changed...");
+  var socket = io('http://maproom.lmc.gatech.edu:8080');
 
-    var newCenter = data['center'];
-    var newZoom = data['zoom'];
-    var newBearing = data['bearing'];
+  socket.on('pushMapUpdate', function(data) {
+    console.log("Controller changed, updating map...");
 
-    map.easeTo({center: newCenter, zoom:newZoom, bearing:newBearing})
-  })
+    mapCenter = data['center'];
+    mapZoom = data['zoom'];
+    mapBearing = data['bearing'];
+
+    console.log(data['bounds']);
+    console.log(data['projectorPosition'])
+
+    leftLong = data['leftLong'];
+    rightLong = data['rightLong'];
+    lowerLat = data['lowerLat'];
+    upperLat = data['upperLat'];
+
+    map.easeTo({center: mapCenter, zoom:(mapZoom*1.1), bearing:mapBearing})
+  });
+
+  socket.on('pushSensorUpdate', function(data) {
+    console.log("New sensor reading: " + data.distance)
+
+    var leftLong = -84.44333855642014;
+    var rightLong = -84.27173029708604
+
+    var start = 3300
+    var end = 5350
+
+    curRatio = ((data.distance - start) / (end-start))
+
+    //curLat = lowerLat + (curRatio * (upperLat - lowerLat))
+    curLong = leftLong + (curRatio * (rightLong - leftLong))
+
+    console.log("Current position is " + data.distance)
+    console.log("Current ratio is " + curRatio)
+    console.log("Moving to " + curLong)
+
+    newCenter = [curLong, 33.76777287243536]
+
+    console.log(newCenter + " " + mapZoom + " " + mapBearing)
+
+    map.easeTo({center: newCenter})
+
+  });
 
   socket.on('pushHideLayer', function(data){
     var hiddenLayer = data['clickedLayer'];
     map.setLayoutProperty(hiddenLayer, 'visibility', 'none');
   });
+
   socket.on('pushShowLayer', function(data){
     var shownLayer = data['clickedLayer'];
     map.setLayoutProperty(shownLayer, 'visibility', 'visible');
