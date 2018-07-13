@@ -41,15 +41,13 @@ app.get('/table.html', function(req, res){
 
 io.on('connection', function (socket) {
 
-  socket.emit('news', { hello: 'world' });
+  socket.on('mapUpdate', function (data) {
+    console.log("Map updated, pushing...");
 
-  socket.on('my other event', function (data) {
-    console.log(data);
-  });
+    console.log(data.center)
+    console.log(data.zoom)
 
-  socket.on('locUpdate', function (data) {
-    console.log("Broadcasting map update...");
-    socket.broadcast.emit('pushLocUpdate', data)
+    socket.broadcast.emit('pushMapUpdate', data)
   });
 
   socket.on('reQueryFeatures', function (data) {
@@ -64,6 +62,14 @@ io.on('connection', function (socket) {
     socket.broadcast.emit("removeMarker", data);
   });
 
+  socket.on("addToProjector", function(data){
+    socket.broadcast.emit("addToProjector", data);
+  });
+
+  socket.on("removeFromProjector", function(data){
+    socket.broadcast.emit("removeFromProjector", data);
+  });
+
   /*socket.on('selectPTProjector', function(data){
     socket.broadcast.emit("sendSelectedProjector", data);
   });*/
@@ -72,9 +78,18 @@ io.on('connection', function (socket) {
     console.log(data.clickedLayer + " Layer hidden");
     socket.broadcast.emit('pushHideLayer', data)
   });
-
   socket.on('showLayer', function(data) {
     console.log(data.clickedLayer + " Layer shown");
     socket.broadcast.emit('pushShowLayer', data) // will emit to client that didn't send
   });
+
+  socket.on('sensorConnected', function(data) {
+    console.log("Sensor server connected");
+  })
+
+  socket.on('sensorUpdate', function(data) {
+    console.log("Sensor updated: " + data.distance);
+    socket.broadcast.emit('pushSensorUpdate', data);
+  })
+
 });

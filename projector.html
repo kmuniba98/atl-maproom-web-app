@@ -3,6 +3,7 @@
 
 <head>
   <meta charset=utf-8 />
+  <title>Projector</title>
   <script src='https://api.mapbox.com/mapbox-gl-js/v0.46.0/mapbox-gl.js'></script>
   <script src="/socket.io/socket.io.js"></script>
   <link href='https://api.mapbox.com/mapbox-gl-js/v0.46.0/mapbox-gl.css' rel='stylesheet' />
@@ -14,30 +15,108 @@
 
 <body>
   <style>
+      @import url('https://fonts.googleapis.com/css?family=PT+Mono|PT+Serif');
+
+        h6 {
+            font-family: 'PT Mono', monospace;
+            padding-left: 80%;
+            line-height: 13px;
+            font-size: 10px;
+            padding-bottom: 17px;
+        }
+
+        h5 {
+            font-family: 'PT Serif', serif;;
+            padding-left: 80%;
+            line-height: 10px;
+            font-size: 12px;
+        }
+        span {
+          padding-top: 0px;
+          padding-bottom: 0px;
+          margin-bottom: 0px;
+          margin-top: 0px;
+          line-height: 10px;
+        }
   </style>
 
   <div id='map'></div>
-
+  <div id="point_text" style="max-height:100%">
+    <h5 id="address_text">Address</h5>
+    <h6 id="address">Address</h6><span></span>
+    <h5 id="assess_text_10">2010 Assessment</h5>
+    <h6 id="tenAssess">2010 Assessment</h6><span></span>
+    <h5 id="assess_text_17">2017 Assessment</h5>
+    <h6 id="sevenAssess">2017 Assessment</h6><span></span>
+    <h5 id="assess_change_text">Assessment Percent Change</h5>
+    <h6 id="assess_change">Assessment Percent Change</h6><span></span>
+    <h5 id="appr_text_10">2010 Appraisal</h5>
+    <h6 id="tenAppr">2010 Appraisal</h6><span></span>
+    <h5 id="appr_text_17">2017 Appraisal</h5>
+    <h6 id="sevenAppr">2017 Appraisal</h6><span></span>
+    <h5 id="appr_change_text">Appraisal Percent Change</h5>
+    <h6 id="appr_change">Appraisal Percent Change</h6>
+  </div>
   <script>
 
-  var socket = io('http://128.61.54.6:8080');
-
+  var leftLong, rightLong, lowerLat, upperLat
+  var mapBearing = 0
+  var mapZoom = 1
+  var mapCenter = [1,1]
   var SPoints = [];
+  var socket = io('http://maproom.lmc.gatech.edu:8080');
 
-  socket.on('pushLocUpdate', function(data) {
-    console.log("Controller changed...");
+  mapboxgl.accessToken = 'pk.eyJ1IjoiYW5uYWJlbHJvdGhzY2hpbGQiLCJhIjoiY2ppNG83M2g1MGI5eTNrcWNyM200cTRteSJ9.zRuYJ-Yr1TcsgkM06jx5rg';
 
-    var newCenter = data['center'];
-    var newZoom = data['zoom'];
-    var newBearing = data['bearing'];
+  socket.on('pushMapUpdate', function(data) {
+    console.log("Controller changed, updating map...");
 
-    map.easeTo({center: newCenter, zoom:newZoom, bearing:newBearing})
-  })
+    mapCenter = data['center'];
+    mapZoom = data['zoom'];
+    mapBearing = data['bearing'];
+
+    console.log(data['bounds']);
+    console.log(data['projectorPosition'])
+
+    leftLong = data['leftLong'];
+    rightLong = data['rightLong'];
+    lowerLat = data['lowerLat'];
+    upperLat = data['upperLat'];
+
+    map.easeTo({center: mapCenter, zoom:(mapZoom + 2.1), bearing:mapBearing})
+  });
+
+  socket.on('pushSensorUpdate', function(data) {
+    console.log("New sensor reading: " + data.distance)
+
+    var leftLong = -84.44333855642014;
+    var rightLong = -84.27173029708604
+
+    var start = 2025
+    var end = 4721
+
+    curRatio = ((data.distance - start) / (end-start))
+
+    //curLat = lowerLat + (curRatio * (upperLat - lowerLat))
+    //curLong = leftLong + (curRatio * (rightLong - leftLong))
+
+    console.log("Current position is " + data.distance)
+    console.log("Current ratio is " + curRatio)
+    console.log("Moving to " + curLong)
+
+    newCenter = [curLong, 33.76777287243536]
+
+    console.log(newCenter + " " + mapZoom + " " + mapBearing)
+
+    map.easeTo({center: newCenter})
+
+  });
 
   socket.on('pushHideLayer', function(data){
     var hiddenLayer = data['clickedLayer'];
     map.setLayoutProperty(hiddenLayer, 'visibility', 'none');
   });
+
   socket.on('pushShowLayer', function(data){
     var shownLayer = data['clickedLayer'];
     map.setLayoutProperty(shownLayer, 'visibility', 'visible');
@@ -47,8 +126,9 @@
   });
 
     //Added by Annabel - manage highlighted points
-  socket.on('removeMarker', function(data){
-    var index = SPoints.indexOf(map.queryRenderedFeatures({layers:['Tax Assessment']})[parseInt(data['removeMarker'])].properties.ID);
+  socket.on('removeFromProjector', function(data){
+    console.log(index);
+    var index = data; //SPoints.indexOf(map.queryRenderedFeatures({layers:['Tax Assessment']})[parseInt(data['removeMarker'])].properties.ID);
     if (index > -1){
         SPoints.splice(index, 1);
     }
@@ -62,17 +142,35 @@
     };
   });
 
-  socket.on('newMarker', function(data) {
-    var current = map.queryRenderedFeatures({layers:['Tax Assessment']})[parseInt(data['newMarker'])];
+  socket.on('addToProjector', function(data) {
+    var current = data; //map.queryRenderedFeatures({layers:['Tax Assessment']})[parseInt(data['newMarker'])];
     SPoints.unshift(current.properties.ID);
     var filter = ['match', ['get', 'ID'], SPoints, true, false];
     map.setFilter("place-highlight", filter);
+    console.log(current.properties.ID);
+    console.log(current);
+
+    if (current.properties['2010_assessment'] > 100){
+        console.log(current.properties['2010_assessment'].toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
+        console.log(current.properties['2010_assessment'].toLocaleString());
+    }
+
+    document.getElementById("address").innerHTML = current.properties['SITUS'];
+    document.getElementById("tenAssess").innerHTML = ("$" + current.properties['2010_assessment'].toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
+    document.getElementById("sevenAssess").innerHTML = ("$" + current.properties['2017_assessment'].toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
+    document.getElementById("assess_change").innerHTML = (current.properties['assess_change'].toLocaleString() +"%");
+    document.getElementById("tenAppr").innerHTML = ("$" + current.properties['2010_appr'].toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
+    document.getElementById("sevenAppr").innerHTML = ("$" + current.properties['2017_appr'].toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
+    document.getElementById("appr_change").innerHTML = (current.properties['appr_change'] + "%");
+
   });
 
-  mapboxgl.accessToken = 'pk.eyJ1IjoibW9kZXJubG92ZWxhY2UiLCJhIjoiY2pmY24zNzhmM2VmaTJ4cDRlNmVoa24wdCJ9.7GBTZc76YFp947kU7A14Gg';
+
+
 
   var map = new mapboxgl.Map({
     container: 'map', // container id
+    center: [-84.27173029708604, 33.76777287243536],
     style:'mapbox://styles/modernlovelace/cjiw122ea18z12so7ijbzd98v'
   });
 
@@ -100,13 +198,13 @@
       // tax layer
       map.addSource('Tax Assessment', {
           type: 'vector',
-          url: 'mapbox://annabelrothschild.4lnspuic'
+          url: 'mapbox://modernlovelace.8gm9j464'
       });
       map.addLayer({
           'id': 'place-highlight',
           'type': 'circle',
           'source': 'Tax Assessment',
-          'source-layer': 'AllPointsGeoJSON-12eyog',
+          'source-layer': 'AllPointsGeoJSONFinal_-b787f1',
           'paint': {
             'circle-color': '#FADA5E',
             'circle-radius': 20,
@@ -136,7 +234,7 @@
                   ["get", "Blue"]
               ]
           },
-          'source-layer': 'AllPointsGeoJSON-12eyog'
+          'source-layer': 'AllPointsGeoJSONFinal_-b787f1'
       });
   });
 

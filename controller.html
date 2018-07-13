@@ -166,22 +166,22 @@
 
   <script>
 
+  var socket = io('http://maproom.lmc.gatech.edu:8080');
   var SPoints = [];
-
-  var socket = io('http://128.61.54.6:8080');
 
   // set initial values for global variables
   var activeRectangle = document.getElementById("longRect");
   var rectWidth = 800;
   var rectHeight = 200;
 
-  socket.on('pushLocUpdate', function(data) {
-    console.log("I UPDATED");
-  });
+  socket.on('pushSensorUpdate', function(data) {
+    console.log("New sensor reading: " + data.distance)
+  })
 
   //Added by Annabel - manage highlighted points
   socket.on('removeMarker', function(data){
     var index = SPoints.indexOf(map.queryRenderedFeatures({layers:['Tax Assessment']})[parseInt(data['removeMarker'])].properties.ID);
+    console.log(index);
     if (index > -1){
       SPoints.splice(index, 1);
     }
@@ -193,13 +193,16 @@
       var filter1 = ['==', 'ID', -1];
       map.setFilter("place-highlight", filter1);
     };
+    socket.emit("removeFromProjector", index);
   });
 
   socket.on('newMarker', function(data) {
     var current = map.queryRenderedFeatures({layers:['Tax Assessment']})[parseInt(data['newMarker'])];
+    console.log(current.properties.ID);
     SPoints.unshift(current.properties.ID);
     var filter = ['match', ['get', 'ID'], SPoints, true, false];
     map.setFilter("place-highlight", filter);
+    socket.emit('addToProjector', current);
   });
 
 
@@ -209,8 +212,8 @@
       container: 'map',
       style: 'mapbox://styles/modernlovelace/cjiw122ea18z12so7ijbzd98v',
       zoom: 12,
-      bearing: -90,
-      center: [-84.3951, 33.7634],
+      bearing: 0,
+      center: [-84.27173029708604, 33.76777287243536],
       interactive: true
   });
 
@@ -328,6 +331,24 @@
   });
 
   map.on('load', function () {
+      // permit layer
+      map.addSource('permits', {
+          type: 'vector',
+          url: 'mapbox://modernlovelace.cjiqeva5803dtfrrvg9g78mzz-7xosm'
+      });
+      map.addLayer({
+          'id': 'permits',
+          'type': 'circle',
+          'source': 'permits',
+          'layout': {
+              'visibility': 'visible'
+          },
+          'paint': {
+              'circle-radius': 8,
+              'circle-color': 'blue'
+          },
+          'source-layer': 'commercial_land_development_2017'
+      });
       // beltline layer
       map.addSource('beltline', {
           type: 'vector',
@@ -357,7 +378,7 @@
           'id': 'place-highlight',
           'type': 'circle',
           'source': 'Tax Assessment',
-          'source-layer': 'AllPointsGeoJSON-12eyog',
+          'source-layer': 'AllPointsGeoJSONFinal_-b787f1',
           'paint': {
             'circle-color': '#FADA5E',
             'circle-radius': 20,
@@ -393,7 +414,7 @@
 
   map.on('moveend', function (e) {
         console.log("Sending move change to server...")
-        socket.emit('locUpdate', {'center': map.getCenter(), 'zoom': map.getZoom(),
+        socket.emit('mapUpdate', {'center': map.getCenter(), 'zoom': map.getZoom(),
                                   'bearing':map.getBearing(), 'geoCoordinates':getGeoCoordinates(),
                                   'activeRectangle':activeRectangle.id, 'endCenters':getEndCenters()})
         socket.emit("reQueryFeatures", {'features':map.queryRenderedFeatures({layers:['Tax Assessment']})});
