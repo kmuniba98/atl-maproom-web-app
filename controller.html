@@ -65,7 +65,7 @@
           display: block;
           position: absolute;
           top: 10px;
-          left: 225px;
+          left: 10px;
           width: 120px;
           padding: 15px;
           border: none;
@@ -152,7 +152,7 @@
   <nav id="menu"></nav>
   <div id="map"></div>
   <canvas id="shortRect"></canvas>
-  <canvas id="longRect" width="500" height="500"></canvas>
+  <canvas id="longRect"></canvas>
   <div id='state-legend' class='legend'>
       <h4>Percent Change:<br>2010 - 2017</h4>
       <div><span style='background-color: #ff0000 '></span>100</div>
@@ -166,7 +166,7 @@
 
   <script>
 
-  var socket = io('http://maproom.lmc.gatech.edu:8080');
+  var socket = io('http://128.61.54.6:8080');
   var SPoints = [];
 
   // set initial values for global variables
@@ -213,7 +213,7 @@
       style: 'mapbox://styles/modernlovelace/cjiw122ea18z12so7ijbzd98v',
       zoom: 12,
       bearing: 0,
-      center: [-84.27173029708604, 33.76777287243536],
+      center: [-84.3951, 33.7634],
       interactive: true
   });
 
@@ -295,8 +295,8 @@
           ctx = stage.getContext('2d'), // canvas 2d rendering context
           x = 0, // intial horizontal position of drawn rectangle
           y = 0 // intial vertical position of drawn rectangle
-          wid = 20, // width of drawn rectangle
-          hei = 20; // height of drawn rectangle
+          wid = 100, // width of drawn rectangle
+          hei = 100; // height of drawn rectangle
           console.log("wid=" + wid + "  hei=" + hei);
 
     // draw rectangle function
@@ -331,24 +331,6 @@
   });
 
   map.on('load', function () {
-      // permit layer
-      map.addSource('permits', {
-          type: 'vector',
-          url: 'mapbox://modernlovelace.cjiqeva5803dtfrrvg9g78mzz-7xosm'
-      });
-      map.addLayer({
-          'id': 'permits',
-          'type': 'circle',
-          'source': 'permits',
-          'layout': {
-              'visibility': 'visible'
-          },
-          'paint': {
-              'circle-radius': 8,
-              'circle-color': 'blue'
-          },
-          'source-layer': 'commercial_land_development_2017'
-      });
       // beltline layer
       map.addSource('beltline', {
           type: 'vector',
@@ -372,13 +354,13 @@
       // tax layer
       map.addSource('Tax Assessment', {
           type: 'vector',
-          url: 'mapbox://modernlovelace.8gm9j464'
+          url: 'mapbox://modernlovelace.8yz9usdz'
       });
       map.addLayer({
           'id': 'place-highlight',
           'type': 'circle',
           'source': 'Tax Assessment',
-          'source-layer': 'AllPointsGeoJSONFinal_-b787f1',
+          'source-layer': 'AllPointsGeoJSONFinal07-13-7hq681',
           'paint': {
             'circle-color': '#FADA5E',
             'circle-radius': 20,
@@ -408,7 +390,7 @@
                   ["get", "Blue"]
               ]
           },
-          'source-layer': 'AllPointsGeoJSONFinal_-b787f1'
+          'source-layer': 'AllPointsGeoJSONFinal07-13-7hq681'
       });
   });
 

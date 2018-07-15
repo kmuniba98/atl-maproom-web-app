@@ -64,7 +64,7 @@
   var mapZoom = 1
   var mapCenter = [1,1]
   var SPoints = [];
-  var socket = io('http://maproom.lmc.gatech.edu:8080');
+  var socket = io('http://128.61.54.6:8080');
 
   mapboxgl.accessToken = 'pk.eyJ1IjoibW9kZXJubG92ZWxhY2UiLCJhIjoiY2pmY24zNzhmM2VmaTJ4cDRlNmVoa24wdCJ9.7GBTZc76YFp947kU7A14Gg';
 
@@ -198,13 +198,13 @@
       // tax layer
       map.addSource('Tax Assessment', {
           type: 'vector',
-          url: 'mapbox://modernlovelace.8gm9j464'
+          url: 'mapbox://modernlovelace.8yz9usdz'
       });
       map.addLayer({
           'id': 'place-highlight',
           'type': 'circle',
           'source': 'Tax Assessment',
-          'source-layer': 'AllPointsGeoJSONFinal_-b787f1',
+          'source-layer': 'AllPointsGeoJSONFinal07-13-7hq681',
           'paint': {
             'circle-color': '#FADA5E',
             'circle-radius': 20,
@@ -234,7 +234,7 @@
                   ["get", "Blue"]
               ]
           },
-          'source-layer': 'AllPointsGeoJSONFinal_-b787f1'
+          'source-layer': 'AllPointsGeoJSONFinal07-13-7hq681'
       });
   });
 
