@@ -60,9 +60,11 @@
   <script>
 
   var leftLong, rightLong, lowerLat, upperLat
-  var mapBearing = 0
-  var mapZoom = 1
-  var mapCenter = [1,1]
+  var curBearing = 0
+  var curZoom = 1
+  var curCenter = [1,1]
+  var curGeoCoords, curActiveRectangle, curEndCenters
+  var rc, lc
   var SPoints = [];
   var socket = io('http://maproom.lmc.gatech.edu:8080');
 
@@ -71,17 +73,17 @@
   socket.on('pushMapUpdate', function(data) {
     console.log("Controller changed, updating map...");
 
-    mapCenter = data['center'];
-    mapZoom = data['zoom'];
-    mapBearing = data['bearing'];
+    curCenter = data['center'];
+    curZoom = data['zoom'];
+    curBearing = data['bearing'];
+    curGeoCoords = data['geoCoordinates'];
+    curActiveRectangle = data['activeRectangle'];
+    curEndCenters = data['endCenters']
 
-    console.log(data['bounds']);
-    console.log(data['projectorPosition'])
+    var leftCenter = curEndCenters.lc
+    var rightCenter = curEndCenters.rc
 
-    leftLong = data['leftLong'];
-    rightLong = data['rightLong'];
-    lowerLat = data['lowerLat'];
-    upperLat = data['upperLat'];
+    console.log(center + ", " + leftCenter + ", " + rightCenter)
 
     map.easeTo({center: mapCenter, zoom:(mapZoom + 2.1), bearing:mapBearing})
   });

@@ -1,12 +1,9 @@
-
-
 var fs = require('fs');
 
 var express = require('express');
 var app = express();
 var http = require('http');
 var bodyParser = require('body-parser');
-
 
 var server = http.createServer(app);
 
@@ -25,17 +22,14 @@ app.get('/', function(req, res) {
 });
 
 app.get('/controller.html', function(req, res){
-  console.log("here")
   res.sendFile(__dirname + '/controller.html');
 });
 
 app.get('/projector.html', function(req, res){
-  console.log("here")
   res.sendFile(__dirname + '/projector.html');
 });
 
 app.get('/table.html', function(req, res){
-  console.log("here")
   res.sendFile(__dirname + '/table.html');
 });
 
