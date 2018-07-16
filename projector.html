@@ -64,6 +64,7 @@
   var curZoom = 1
   var curCenter = [1,1]
   var curGeoCoords, curActiveRectangle, curEndCenters
+  var leftCenter, rightCenter
   var rc, lc
   var SPoints = [];
   var socket = io('http://maproom.lmc.gatech.edu:8080');
@@ -80,8 +81,8 @@
     curActiveRectangle = data['activeRectangle'];
     curEndCenters = data['endCenters']
 
-    var leftCenter = curEndCenters.lc
-    var rightCenter = curEndCenters.rc
+    leftCenter = curEndCenters.lc
+    rightCenter = curEndCenters.rc
 
     console.log(curBearing + ", " + JSON.stringify(leftCenter) + ", " + JSON.stringify(rightCenter))
 
