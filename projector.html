@@ -86,7 +86,7 @@
 
     console.log(curBearing + ", " + JSON.stringify(leftCenter) + ", " + JSON.stringify(rightCenter))
 
-    map.easeTo({center: curCenter, zoom:(curZoom + 2.1), bearing:curBearing})
+    map.easeTo({center: curCenter, zoom:(curZoom + 2.7), bearing:curBearing})
   });
 
   socket.on('pushSensorUpdate', function(data) {
@@ -103,7 +103,7 @@
 
     console.log(projLat + ", " + projLong)
 
-    map.easeTo({center: {lng: projLong, lat:projLat}, zoom:(curZoom + 2.6), bearing:curBearing})
+    map.easeTo({center: {lng: projLong, lat:projLat}, zoom:(curZoom + 2.7), bearing:curBearing})
 
   });
 
