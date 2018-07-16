@@ -139,7 +139,7 @@
 
   socket.on('addToProjector', function(data) {
     var current = data; //map.queryRenderedFeatures({layers:['Tax Assessment']})[parseInt(data['newMarker'])];
-    SPoints.unshift(current.properties.ID);
+    SPoints = [current.properties.ID];
     var filter = ['match', ['get', 'ID'], SPoints, true, false];
     map.setFilter("place-highlight", filter);
     console.log(current.properties.ID);
