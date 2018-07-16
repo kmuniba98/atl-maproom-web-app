@@ -67,7 +67,7 @@
   var leftCenter, rightCenter
   var rc, lc
   var SPoints = [];
-  var socket = io('http://maproom.lmc.gatech.edu:8080');
+  var socket = io('http://128.61.121.12:8080');
 
   mapboxgl.accessToken = 'pk.eyJ1IjoibW9kZXJubG92ZWxhY2UiLCJhIjoiY2pmY24zNzhmM2VmaTJ4cDRlNmVoa24wdCJ9.7GBTZc76YFp947kU7A14Gg';
 
@@ -139,7 +139,7 @@
 
   socket.on('addToProjector', function(data) {
     var current = data; //map.queryRenderedFeatures({layers:['Tax Assessment']})[parseInt(data['newMarker'])];
-    SPoints.unshift(current.properties.ID);
+    SPoints = [current];
     var filter = ['match', ['get', 'ID'], SPoints, true, false];
     map.setFilter("place-highlight", filter);
     console.log(current.properties.ID);
