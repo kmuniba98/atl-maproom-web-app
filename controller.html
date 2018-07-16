@@ -166,7 +166,7 @@
 
   <script>
 
-  var socket = io('http://maproom.lmc.gatech.edu:8080');
+  var socket = io('http://128.61.121.12:8080');
   var SPoints = [];
 
   // set initial values for global variables
@@ -180,7 +180,12 @@
 
   //Added by Annabel - manage highlighted points
   socket.on('removeMarker', function(data){
-    var index = SPoints.indexOf(map.queryRenderedFeatures({layers:['Tax Assessment']})[parseInt(data['removeMarker'])].properties.ID);
+    var points = getPixelCoordinates();
+    var x1 = points.bl.x;
+    var x2 = points.ur.x;
+    var y1 = points.bl.y;
+    var y2 = points.ur.y;
+    var index = SPoints.indexOf(map.queryRenderedFeatures([[x1,y1], [x2, y2]], {layers:['Tax Assessment']})[parseInt(data['removeMarker'])].properties.ID);
     console.log(index);
     if (index > -1){
       SPoints.splice(index, 1);
@@ -197,7 +202,12 @@
   });
 
   socket.on('newMarker', function(data) {
-    var current = map.queryRenderedFeatures({layers:['Tax Assessment']})[parseInt(data['newMarker'])];
+    var points = getPixelCoordinates();
+    var x1 = points.bl.x;
+    var x2 = points.ur.x;
+    var y1 = points.bl.y;
+    var y2 = points.ur.y;
+    var current = map.queryRenderedFeatures([[x1, y1], [x2, y2]],{layers:['Tax Assessment']})[parseInt(data['newMarker'])];
     console.log(current.properties.ID);
     SPoints = [current.properties.ID];
     var filter = ['match', ['get', 'ID'], SPoints, true, false];
@@ -354,13 +364,13 @@
       // tax layer
       map.addSource('Tax Assessment', {
           type: 'vector',
-          url: 'mapbox://modernlovelace.8yz9usdz'
+          url: 'mapbox://modernlovelace.9d2yt2vs'
       });
       map.addLayer({
           'id': 'place-highlight',
           'type': 'circle',
           'source': 'Tax Assessment',
-          'source-layer': 'AllPointsGeoJSONFinal07-13-7hq681',
+          'source-layer': 'AllPointsGeoJSONFinal07-16-8c5vci',
           'paint': {
             'circle-color': '#FADA5E',
             'circle-radius': 20,
@@ -390,7 +400,7 @@
                   ["get", "Blue"]
               ]
           },
-          'source-layer': 'AllPointsGeoJSONFinal07-13-7hq681'
+          'source-layer': 'AllPointsGeoJSONFinal07-16-8c5vci'
       });
   });
 
@@ -399,7 +409,12 @@
         socket.emit('mapUpdate', {'center': map.getCenter(), 'zoom': map.getZoom(),
                                   'bearing':map.getBearing(), 'geoCoordinates':getGeoCoordinates(),
                                   'activeRectangle':activeRectangle.id, 'endCenters':getEndCenters()})
-        socket.emit("reQueryFeatures", {'features':map.queryRenderedFeatures({layers:['Tax Assessment']})});
+      var points = getPixelCoordinates();
+      var x1 = points.bl.x;
+      var x2 = points.ur.x;
+      var y1 = points.bl.y;
+      var y2 = points.ur.y;  
+      socket.emit("reQueryFeatures", {'features':map.queryRenderedFeatures([[x1, y1], [x2, y2]],{layers:['Tax Assessment']})});
   });
 
   // link layers to buttons
