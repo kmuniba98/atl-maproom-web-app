@@ -89,28 +89,20 @@
   });
 
   socket.on('pushSensorUpdate', function(data) {
-    console.log("New sensor reading: " + data.distance)
 
-    var leftLong = -84.44333855642014;
-    var rightLong = -84.27173029708604
+    console.log("New sensor reading: " + data.distance)
 
     var start = 2025
     var end = 4721
 
-    curRatio = ((data.distance - start) / (end-start))
+    projRatio = ((data.distance - start) / (end-start))
 
-    //curLat = lowerLat + (curRatio * (upperLat - lowerLat))
-    //curLong = leftLong + (curRatio * (rightLong - leftLong))
+    projLat = leftCenter.lat + (projRatio * (rightCenter.lat - leftCenter.lat))
+    projLong = leftCenter.lng + (projRatio * (rightCenter.lng - leftCenter.lng))
 
-    console.log("Current position is " + data.distance)
-    console.log("Current ratio is " + curRatio)
-    console.log("Moving to " + curLong)
+    console.log(projLat + ", " projLong)
 
-    newCenter = [curLong, 33.76777287243536]
-
-    console.log(newCenter + " " + mapZoom + " " + mapBearing)
-
-    map.easeTo({center: newCenter})
+    map.easeTo({center: {lng: projLong, lat:projLat}, zoom:(curZoom + 2.1), bearing:curBearing})
 
   });
 
