@@ -100,7 +100,7 @@
     projLat = leftCenter.lat + (projRatio * (rightCenter.lat - leftCenter.lat))
     projLong = leftCenter.lng + (projRatio * (rightCenter.lng - leftCenter.lng))
 
-    console.log(projLat + ", " projLong)
+    console.log(projLat + ", " + projLong)
 
     map.easeTo({center: {lng: projLong, lat:projLat}, zoom:(curZoom + 2.1), bearing:curBearing})
 
