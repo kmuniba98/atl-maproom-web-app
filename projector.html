@@ -64,7 +64,8 @@
   var curZoom = 1
   var curCenter = [1,1]
   var curGeoCoords, curActiveRectangle, curEndCenters
-  var leftCenter, rightCenter
+  var leftCenter = [1,1]
+  var rightCenter = [1,1]
   var rc, lc
   var SPoints = [];
   var socket = io('http://maproom.lmc.gatech.edu:8080');
