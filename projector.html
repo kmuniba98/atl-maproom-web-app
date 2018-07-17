@@ -191,11 +191,32 @@
               'line-width': 8
           }
       });
+      // Census tracts
+      map.addSource('Census Tracts', {
+          type: 'vector',
+          url: 'modernlovelace.7ycr46yn'
+      });
+      map.addLayer({
+          'id': 'census_tracts',
+          'type': 'line',
+          'source': 'census_tracts',
+          'source-layer': 'cb_2017_13_tract_500k_1-ch9z8k',
+          'layout': {
+              'visibility': 'visible',
+              'line-join': 'round',
+              'line-cap': 'round'
+          },
+          'paint': {
+              'line-color': 'yellow',
+              'line-width': 2
+          }
+      });
       // tax layer
       map.addSource('Tax Assessment', {
           type: 'vector',
           url: 'mapbox://modernlovelace.8yz9usdz'
       });
+
       map.addLayer({
           'id': 'place-highlight',
           'type': 'circle',
