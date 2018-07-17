@@ -13,7 +13,7 @@
   </style>
 </head>
 
-<body>
+<body style="background-color:black">
   <style>
       @import url('https://fonts.googleapis.com/css?family=PT+Mono|PT+Serif');
 
@@ -30,6 +30,7 @@
             padding-left: 80%;
             line-height: 20px;
             font-size: 24px;
+            color: white;
         }
         span {
           padding-top: 0px;
@@ -37,11 +38,12 @@
           margin-bottom: 0px;
           margin-top: 0px;
           line-height: 10px;
+          color: red;
         }
   </style>
 
-  <div id='map'></div>
-  <div id="point_text" style="max-height:100%">
+  <div id='map' style="background-color:black"></div>
+  <div id="point_text" style="max-height:100%;color:white;background-color:black">
     <h5 id="address_text">Address</h5>
     <h6 id="address">Address</h6><span></span>
     <h5 id="assess_text_10">2010 Assessment</h5>
@@ -68,7 +70,7 @@
   var rightCenter = {lng:-82.3880,lat:33.7490}
   var rc, lc
   var SPoints = [];
-  var socket = io('http://maproom.lmc.gatech.edu:8080');
+  var socket = io('http://128.61.121.12:8080');
 
   mapboxgl.accessToken = 'pk.eyJ1IjoibW9kZXJubG92ZWxhY2UiLCJhIjoiY2pmY24zNzhmM2VmaTJ4cDRlNmVoa24wdCJ9.7GBTZc76YFp947kU7A14Gg';
 
