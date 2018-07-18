@@ -71,6 +71,7 @@
   var rc, lc
   var SPoints = [];
   var socket = io('http://maproom.lmc.gatech.edu:8080');
+  var projRatio = 0.5
 
   mapboxgl.accessToken = 'pk.eyJ1IjoibW9kZXJubG92ZWxhY2UiLCJhIjoiY2pmY24zNzhmM2VmaTJ4cDRlNmVoa24wdCJ9.7GBTZc76YFp947kU7A14Gg';
 
@@ -87,9 +88,12 @@
     leftCenter = curEndCenters.lc
     rightCenter = curEndCenters.rc
 
+    projLat = leftCenter.lat + (projRatio * (rightCenter.lat - leftCenter.lat))
+    projLong = leftCenter.lng + (projRatio * (rightCenter.lng - leftCenter.lng))
+
     console.log(curBearing + ", " + JSON.stringify(leftCenter) + ", " + JSON.stringify(rightCenter))
 
-    map.easeTo({center: curCenter, zoom:(curZoom + 2.7), bearing:curBearing})
+      map.easeTo({center: {lng: projLong, lat:projLat}, zoom:(curZoom + 2.7), bearing:curBearing, duration:2000})
   });
 
   socket.on('pushSensorUpdate', function(data) {
