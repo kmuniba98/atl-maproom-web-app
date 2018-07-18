@@ -46,7 +46,7 @@
 
   <script>
 
-  var socket = io('http://maproom.lmc.gatech.edu:8080');
+  var socket = io('http://maproom.lmc.gatech.edu:8080/');
 
   function normalize(data) {
     var result = [];
@@ -67,10 +67,14 @@
   };
 
 
-  socket.on('reQueryFeatures', function(data) {
+  socket.on('updateTable', function(data) {
+    console.log("updating table");
+    console.log(data);
+    console.log(normalize(data.features));
     $("table").DataTable().destroy();
     var datatable = $("table").DataTable({
-        "aaData":normalize(data.features),
+        //removed data.features, use in 
+        "aaData":normalize(data),
         "aoColums":[
             {title: "ID", data: "ID"},
             {title: "Address", data: "SITUS"},
@@ -107,9 +111,8 @@
         console.log("resetting currClick");
       }
       else{
-          console.log(currClick);
-
-          if (currClick != -1){
+          if (currClick > -1){
+              console.log(currClick);
               socket.emit("removeMarker", {'removeMarker':currClick});
           };
           //need to remove from selected class

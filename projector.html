@@ -69,9 +69,15 @@
   var leftCenter = {lng:-84.3880,lat:33.7490}
   var rightCenter = {lng:-82.3880,lat:33.7490}
   var rc, lc
+<<<<<<< HEAD
+  var TA = false;
+  var currentPoints = null;
+  var socket = io('http://maproom.lmc.gatech.edu:8080/');
+=======
   var SPoints = [];
   var socket = io('http://maproom.lmc.gatech.edu:8080');
   var projRatio = 0.5
+>>>>>>> 5329d34c2cedbbcf9bfc9aeaa519eabdbde46a4e
 
   mapboxgl.accessToken = 'pk.eyJ1IjoibW9kZXJubG92ZWxhY2UiLCJhIjoiY2pmY24zNzhmM2VmaTJ4cDRlNmVoa24wdCJ9.7GBTZc76YFp947kU7A14Gg';
 
@@ -93,7 +99,18 @@
 
     console.log(curBearing + ", " + JSON.stringify(leftCenter) + ", " + JSON.stringify(rightCenter))
 
+<<<<<<< HEAD
+    map.easeTo({center: curCenter, zoom:(curZoom + 2.7), bearing:curBearing})
+    
+    
+    if (TA){
+        currentPoints = map.queryRenderedFeatures({'layers':['Tax Assessment']});
+        socket.emit("updateTable", map.queryRenderedFeatures({'layers':['Tax Assessment']}));
+        console.log("length of query"); console.log(map.queryRenderedFeatures({'layers':['Tax Assessment']}));
+    }
+=======
       map.easeTo({center: {lng: projLong, lat:projLat}, zoom:(curZoom + 2.7), bearing:curBearing, duration:1000})
+>>>>>>> 5329d34c2cedbbcf9bfc9aeaa519eabdbde46a4e
   });
 
   socket.on('pushSensorUpdate', function(data) {
@@ -106,7 +123,14 @@
     projLat = leftCenter.lat + (projRatio * (rightCenter.lat - leftCenter.lat))
     projLong = leftCenter.lng + (projRatio * (rightCenter.lng - leftCenter.lng))
 
+<<<<<<< HEAD
+    map.easeTo({center: {lng: projLong, lat:projLat}, zoom:(curZoom + 2.7), bearing:curBearing, duration:2000})
+      
+    //NEEDS IF 
+    //socket.emit("updateTable", map.queryRenderedFeatures({'layers':['Tax Assessment']}));
+=======
     map.easeTo({center: {lng: projLong, lat:projLat}, zoom:(curZoom + 2.7), bearing:curBearing, duration:1000})
+>>>>>>> 5329d34c2cedbbcf9bfc9aeaa519eabdbde46a4e
 
   });
 
@@ -122,50 +146,57 @@
   socket.on('pushChangeSize', function(data){ // for toggleRectangle
 
   });
-
-    //Added by Annabel - manage highlighted points
-  socket.on('removeFromProjector', function(data){
-    console.log(index);
-    var index = data; //SPoints.indexOf(map.queryRenderedFeatures({layers:['Tax Assessment']})[parseInt(data['removeMarker'])].properties.ID);
-    if (index > -1){
-        SPoints.splice(index, 1);
-    }
-    if (SPoints.length > 0){
-      var filter2 = ['match', ['get', 'ID'], SPoints, true, false];
-      map.setFilter("place-highlight", filter2);
-    }
-    else{
-      var filter1 = ['==', 'ID', -1];
-      map.setFilter("place-highlight", filter1);
-    };
+      
+  socket.on('addTA', function(data){
+    map.setLayoutProperty('Tax Assessment', 'visibility', 'visible');
+    TA = true;
   });
-
-  socket.on('addToProjector', function(data) {
-    var current = data; //map.queryRenderedFeatures({layers:['Tax Assessment']})[parseInt(data['newMarker'])];
-    SPoints = [current.properties.ID];
-    var filter = ['match', ['get', 'ID'], SPoints, true, false];
+  
+  socket.on('removeTA', function(data){
+    console.log("in removeTA");
+    map.setLayoutProperty('Tax Assessment', 'visibility', 'none');
+    TA = false;
+  });
+      
+  socket.on("removeMarker", function(data){
+    console.log("removing marker");
+    console.log(data.removeMarker);
+    console.log("current points");
+    console.log(currentPoints);
+//map.queryRenderedFeatures({'layers':['Tax Assessment']})[parseInt(data['removeMarker'])].properties.ID;
+    var filter = ['match', ['get', 'ID'], -1, true, false];
     map.setFilter("place-highlight", filter);
-    console.log(current.properties.ID);
-    console.log(current);
-
-    if (current.properties['2010_assessment'] > 100){
-        console.log(current.properties['2010_assessment'].toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
-        console.log(current.properties['2010_assessment'].toLocaleString());
-    }
-
+  });
+      
+  socket.on("newMarker", function(data){
+    console.log("adding marker");
+    console.log(data.newMarker);
+    console.log("current points");
+    console.log(currentPoints[0]);
+    var current = currentPoints[parseInt(data['newMarker'])];//map.queryRenderedFeatures({'layers':['Tax Assessment']})[parseInt(data['newMarker'])].properties.ID;
+    var filter = ['match', ['get', 'ID'], current.properties.ID, true, false];
+    map.setFilter("place-highlight", filter);
+      
+    
     document.getElementById("address").innerHTML = current.properties['SITUS'];
     document.getElementById("tenAssess").innerHTML = ("$" + current.properties['2010_assessment'].toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
     document.getElementById("sevenAssess").innerHTML = ("$" + current.properties['2017_assessment'].toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
-    document.getElementById("assess_change").innerHTML = (current.properties['assess_change'].toLocaleString() +"%");
+    if (current.properties['assess_change'] < -100){
+        document.getElementById("assess_change").innerHTML = "No Change"
+    }else{
+        document.getElementById("assess_change").innerHTML = (current.properties['assess_change'].toLocaleString() +"%");
+    }
     document.getElementById("tenAppr").innerHTML = ("$" + current.properties['2010_appr'].toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
     document.getElementById("sevenAppr").innerHTML = ("$" + current.properties['2017_appr'].toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
-    document.getElementById("appr_change").innerHTML = (current.properties['appr_change'] + "%");
-
+    if (current.properties['appr_change'] < -100){
+        document.getElementById("appr_change").innerHTML = "No Change"
+    }else{
+        document.getElementById("appr_change").innerHTML = (current.properties['appr_change'] +"%");
+    }
+      
   });
 
-
-
-
+ 
   var map = new mapboxgl.Map({
     container: 'map', // container id
     center: [-84.27173029708604, 33.76777287243536],
@@ -222,14 +253,14 @@
       // tax layer
       map.addSource('Tax Assessment', {
           type: 'vector',
-          url: 'mapbox://modernlovelace.8yz9usdz'
+          url: 'mapbox://modernlovelace.byryezk5'
       });
 
       map.addLayer({
           'id': 'place-highlight',
           'type': 'circle',
           'source': 'Tax Assessment',
-          'source-layer': 'AllPointsGeoJSONFinal07-13-7hq681',
+          'source-layer': 'AllPointsGeoJSON07-18-8huxq7',
           'paint': {
             'circle-color': '#FADA5E',
             'circle-radius': 20,
@@ -252,14 +283,18 @@
           },
           'paint': {
               'circle-radius': 3,
-              'circle-color': [
-                  "rgb",
-                  ["get", "Red"],
-                  ["get", "Green"],
-                  ["get", "Blue"]
-              ]
+              'circle-color': {
+                "property":'appr_change',
+                "stops": [
+                  [-105, '#C0C0C0'],
+                  [-100, '#00a4d1'],
+                  [0, '#fffcd6'],
+                  [100, '#e92f2f']
+                ]
+              },
+              'circle-opacity': 0.75
           },
-          'source-layer': 'AllPointsGeoJSONFinal07-13-7hq681'
+          'source-layer': 'AllPointsGeoJSON07-18-8huxq7'
       });
       // MARTA Buses and Rail (all one color)
       map.addSource('MARTA', {

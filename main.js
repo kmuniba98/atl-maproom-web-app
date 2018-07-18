@@ -44,24 +44,24 @@ io.on('connection', function (socket) {
     socket.broadcast.emit('pushMapUpdate', data)
   });
 
-  socket.on('reQueryFeatures', function (data) {
-    socket.broadcast.emit("reQueryFeatures", data);
+  socket.on("addTA", function(data){
+    socket.broadcast.emit("addTA", data);
   });
 
-  socket.on('newMarker', function (data) {
-    socket.broadcast.emit("newMarker", data);
+  socket.on("removeTA", function(data){
+    socket.broadcast.emit("removeTA", data);
   });
 
-  socket.on('removeMarker', function(data){
+  socket.on("updateTable", function(data){
+    socket.broadcast.emit("updateTable", data);
+  });
+
+  socket.on("removeMarker", function(data){
     socket.broadcast.emit("removeMarker", data);
   });
 
-  socket.on("addToProjector", function(data){
-    socket.broadcast.emit("addToProjector", data);
-  });
-
-  socket.on("removeFromProjector", function(data){
-    socket.broadcast.emit("removeFromProjector", data);
+  socket.on("newMarker", function(data){
+    socket.broadcast.emit("newMarker", data);
   });
 
   /*socket.on('selectPTProjector', function(data){

@@ -165,54 +165,19 @@
 
   <script>
 
-  var socket = io('http://maproom.lmc.gatech.edu:8080');
-  var SPoints = [];
+  var socket = io('http://maproom.lmc.gatech.edu:8080/');
 
   // set initial values for global variables
   var activeRectangle = document.getElementById("longRect");
   var rectWidth = 800;
   var rectHeight = 200;
+  var TA = false;
 
   socket.on('pushSensorUpdate', function(data) {
     console.log("New sensor reading: " + data.distance)
   })
 
   //Added by Annabel - manage highlighted points
-  socket.on('removeMarker', function(data){
-    var points = getPixelCoordinates();
-    var x1 = points.bl.x;
-    var x2 = points.ur.x;
-    var y1 = points.bl.y;
-    var y2 = points.ur.y;
-    var index = SPoints.indexOf(map.queryRenderedFeatures([[x1,y1], [x2, y2]], {layers:['Tax Assessment']})[parseInt(data['removeMarker'])].properties.ID);
-    console.log(index);
-    if (index > -1){
-      SPoints.splice(index, 1);
-    }
-    if (SPoints.length > 0){
-      var filter2 = ['match', ['get', 'ID'], SPoints, true, false];
-      map.setFilter("place-highlight", filter2);
-    }
-    else{
-      var filter1 = ['==', 'ID', -1];
-      map.setFilter("place-highlight", filter1);
-    };
-    socket.emit("removeFromProjector", index);
-  });
-
-  socket.on('newMarker', function(data) {
-    var points = getPixelCoordinates();
-    var x1 = points.bl.x;
-    var x2 = points.ur.x;
-    var y1 = points.bl.y;
-    var y2 = points.ur.y;
-    var current = map.queryRenderedFeatures([[x1, y1], [x2, y2]],{layers:['Tax Assessment']})[parseInt(data['newMarker'])];
-    console.log(current.properties.ID);
-    SPoints = [current.properties.ID];
-    var filter = ['match', ['get', 'ID'], SPoints, true, false];
-    map.setFilter("place-highlight", filter);
-    socket.emit('addToProjector', current);
-  });
 
 
   mapboxgl.accessToken = 'pk.eyJ1IjoibW9kZXJubG92ZWxhY2UiLCJhIjoiY2pmY24zNzhmM2VmaTJ4cDRlNmVoa24wdCJ9.7GBTZc76YFp947kU7A14Gg';
@@ -361,46 +326,6 @@
           }
       });
       // tax layer
-      map.addSource('Tax Assessment', {
-          type: 'vector',
-          url: 'mapbox://modernlovelace.8yz9usdz'
-      });
-      map.addLayer({
-          'id': 'place-highlight',
-          'type': 'circle',
-          'source': 'Tax Assessment',
-          'source-layer': 'AllPointsGeoJSONFinal07-13-7hq681',
-          'paint': {
-            'circle-color': '#FADA5E',
-            'circle-radius': 20,
-            'circle-opacity': .5,
-          },
-          'filter': ['==', 'ID', -1]
-      });
-      map.addLayer({
-          'id': 'Tax Assessment',
-          'type': 'circle',
-          'source': 'Tax Assessment',
-          'interactive': true,
-          "layout": {
-                    "text-font": "Open Sans Semibold, Arial Unicode MS Bold",
-                    "text-offset": [0, 0.6],
-                    "text-anchor": "top"
-                  },
-          'layout': {
-              'visibility': 'none'
-          },
-          'paint': {
-              'circle-radius': 3,
-              'circle-color': [
-                  "rgb",
-                  ["get", "Red"],
-                  ["get", "Green"],
-                  ["get", "Blue"]
-              ]
-          },
-          'source-layer': 'AllPointsGeoJSONFinal07-13-7hq681'
-      });
       // Change median income later
       map.addSource('Median Income Change', {
           type: 'vector',
@@ -455,12 +380,6 @@
         socket.emit('mapUpdate', {'center': map.getCenter(), 'zoom': map.getZoom(),
                                   'bearing':map.getBearing(), 'geoCoordinates':getGeoCoordinates(),
                                   'activeRectangle':activeRectangle.id, 'endCenters':getEndCenters()})
-      var points = getPixelCoordinates();
-      var x1 = points.bl.x;
-      var x2 = points.ur.x;
-      var y1 = points.bl.y;
-      var y2 = points.ur.y;
-      socket.emit("reQueryFeatures", {'features':map.queryRenderedFeatures([[x1, y1], [x2, y2]],{layers:['Tax Assessment', 'Median Income Change', 'MARTA']})});
   });
 
   // link layers to buttons
@@ -471,23 +390,33 @@
       var link = document.createElement('a');
       link.href = '#';
       link.textContent = id;
-
       link.onclick = function (e) {
           var clickedLayer = this.textContent;
           e.preventDefault();
           e.stopPropagation();
-          var visibility = map.getLayoutProperty(clickedLayer, 'visibility');
-
-          if (visibility === 'visible') {
-              map.setLayoutProperty(clickedLayer, 'visibility', 'none');
-              socket.emit('hideLayer', {'clickedLayer':clickedLayer})
-              this.className = '';
-          } else {
-              this.className = 'active';
-              map.setLayoutProperty(clickedLayer, 'visibility', 'visible');
-              socket.emit('showLayer', {'clickedLayer':clickedLayer})
+          if (!(clickedLayer===('Tax Assessment'))){
+              var visibility = map.getLayoutProperty(clickedLayer, 'visibility');
+              if (visibility === 'visible') {
+                map.setLayoutProperty(clickedLayer, 'visibility', 'none');
+                socket.emit('hideLayer', {'clickedLayer':clickedLayer})
+                this.className = '';
+              } else {
+                this.className = 'active';
+                map.setLayoutProperty(clickedLayer, 'visibility', 'visible');
+                socket.emit('showLayer', {'clickedLayer':clickedLayer})
+            };
+          }else{
+              if (TA){
+                  console.log("removing TA");
+                  socket.emit("removeTA", {'info':'none'});
+                  TA = false;
+                  this.className = "";
+              }else{
+                  socket.emit("addTA", {'info':'none'});
+                  TA = true;
+                  this.className = 'active';
+              }
           }
-
           console.log("Sending layer change to server...")
       };
 
