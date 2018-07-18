@@ -409,7 +409,7 @@
       });
       map.addLayer({
           'id': 'Median Income',
-          'type': 'line',
+          'type': 'fill',
           'source': 'Median Income',
           'source-layer': 'merged2-1ylp9s',
           'layout': {
@@ -427,7 +427,8 @@
                   [0, '#fffcd6'],
                   [95.6, '#e92f2f']
                 ]
-              }
+              },
+              'fill-opacity': 0.5
           }
       });
   });
