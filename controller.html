@@ -403,17 +403,17 @@
           'source-layer': 'AllPointsGeoJSONFinal07-13-7hq681'
       });
       // Change median income later
-      map.addSource('Median Income', {
+      map.addSource('Median Income Change', {
           type: 'vector',
           url: 'mapbox://modernlovelace.3jq6hc6x'
       });
       map.addLayer({
-          'id': 'Median Income',
+          'id': 'Median Income Change',
           'type': 'fill',
-          'source': 'Median Income',
+          'source': 'Median Income Change',
           'source-layer': 'merged2-1ylp9s',
           'layout': {
-              'visibility': 'visible',
+              'visibility': 'none',
           },
           'paint': {
               'fill-outline-color': '#f7ff05',
