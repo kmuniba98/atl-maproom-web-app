@@ -262,9 +262,13 @@
           'source-layer': 'AllPointsGeoJSONFinal07-13-7hq681'
       });
   });
-
-  map.addControl(new mapboxgl.FullscreenControl());
-
+  map.boxZoom.disable();
+  map.scrollZoom.disable();
+  map.dragPan.disable();
+  map.dragRotate.disable();
+  map.keyboard.disable();
+  map.doubleClickZoom.disable();
+  map.touchZoomRotate.disable();
 
   </script>
 
