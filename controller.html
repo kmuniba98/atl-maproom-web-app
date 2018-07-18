@@ -402,6 +402,26 @@
           },
           'source-layer': 'AllPointsGeoJSONFinal07-13-7hq681'
       });
+      // Change median income later
+      map.addSource('Median Income', {
+          type: 'vector',
+          url: 'mapbox://modernlovelace.3jq6hc6x'
+      });
+      map.addLayer({
+          'id': 'Median Income',
+          'type': 'line',
+          'source': 'beltline',
+          'source-layer': 'merged2-1ylp9s',
+          'layout': {
+              'visibility': 'visible',
+              'line-join': 'round',
+              'line-cap': 'round'
+          },
+          'paint': {
+              'line-color': 'yellow',
+              'line-width': 2
+          }
+      });
   });
 
   map.on('moveend', function (e) {
@@ -413,12 +433,12 @@
       var x1 = points.bl.x;
       var x2 = points.ur.x;
       var y1 = points.bl.y;
-      var y2 = points.ur.y;  
+      var y2 = points.ur.y;
       socket.emit("reQueryFeatures", {'features':map.queryRenderedFeatures([[x1, y1], [x2, y2]],{layers:['Tax Assessment']})});
   });
 
   // link layers to buttons
-  var toggleableLayerIds = [ 'Tax Assessment' ];
+  var toggleableLayerIds = [ 'Tax Assessment', 'Change Median Income' ];
 
   for (var i = 0; i < toggleableLayerIds.length; i++) {
       var id = toggleableLayerIds[i];
