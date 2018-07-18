@@ -431,13 +431,13 @@
       // Change median income later
       map.addSource('MARTA', {
           type: 'vector',
-          url: 'mapbox://modernlovelace.5x2z1ptg'
+          url: 'mapbox://modernlovelace.6n51t4jo'
       });
       map.addLayer({
           'id': 'MARTA',
           'type': 'line',
           'source': 'MARTA',
-          'source-layer': 'marta-63o7wp',
+          'source-layer': 'marta-8pkeb3',
           'layout': {
               'visibility': 'none',
               'line-join': 'round',
@@ -445,13 +445,7 @@
           },
           'paint': {
               'line-width': 3,
-              'line-color': {
-                property: "shape_id",
-                stops: [
-                  [0, '#00ff00'],
-                  [50000, '#ff0000']
-                ]
-              }
+              'line-color': "f375ff"
           }
       });
   });
