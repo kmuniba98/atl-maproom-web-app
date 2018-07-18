@@ -94,8 +94,6 @@
 
   socket.on('pushSensorUpdate', function(data) {
 
-    console.log("New sensor reading: " + data.distance)
-
     var start = 1770 //1840
     var end = 5080
 
@@ -103,8 +101,6 @@
 
     projLat = leftCenter.lat + (projRatio * (rightCenter.lat - leftCenter.lat))
     projLong = leftCenter.lng + (projRatio * (rightCenter.lng - leftCenter.lng))
-
-    console.log(projLat + ", " + projLong)
 
     map.easeTo({center: {lng: projLong, lat:projLat}, zoom:(curZoom + 2.7), bearing:curBearing, duration:2000})
 
