@@ -257,6 +257,27 @@
           },
           'source-layer': 'AllPointsGeoJSONFinal07-13-7hq681'
       });
+      // MARTA Buses and Rail (all one color)
+      map.addSource('MARTA', {
+          type: 'vector',
+          url: 'mapbox://modernlovelace.6n51t4jo'
+      });
+      map.addLayer({
+          'id': 'MARTA',
+          'type': 'line',
+          'source': 'MARTA',
+          'source-layer': 'marta-8pkeb3',
+          'layout': {
+              'visibility': 'none',
+              'line-join': 'round',
+              'line-cap': 'round'
+          },
+          'paint': {
+              'line-width': 3,
+              'line-color': "#32ffd9",
+              'line-opacity': 0.8
+          }
+      });
   });
   map.boxZoom.disable();
   map.scrollZoom.disable();
