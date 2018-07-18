@@ -193,24 +193,30 @@
               'line-width': 8
           }
       });
-      // Census tracts
-      map.addSource('Census Tracts', {
+      // Change median income later
+      map.addSource('Median Income Change', {
           type: 'vector',
-          url: 'mapbox://modernlovelace.7ycr46yn'
+          url: 'mapbox://modernlovelace.3jq6hc6x'
       });
       map.addLayer({
-          'id': 'Census Tracts',
-          'type': 'line',
-          'source': 'Census Tracts',
-          'source-layer': 'cb_2017_13_tract_500k_1-ch9z8k',
+          'id': 'Median Income Change',
+          'type': 'fill',
+          'source': 'Median Income Change',
+          'source-layer': 'merged2-1ylp9s',
           'layout': {
-              'visibility': 'visible',
-              'line-join': 'round',
-              'line-cap': 'round'
+              'visibility': 'none',
           },
           'paint': {
-              'line-color': 'yellow',
-              'line-width': 2
+              'fill-outline-color': '#f7ff05',
+              'fill-color': {
+                property:'P_C_M_I',
+                stops: [
+                  [-51.5, '#00a4d1'],
+                  [0, '#fffcd6'],
+                  [95.6, '#e92f2f']
+                ]
+              },
+              'fill-opacity': 0.5
           }
       });
       // tax layer

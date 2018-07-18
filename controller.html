@@ -440,7 +440,7 @@
       var x2 = points.ur.x;
       var y1 = points.bl.y;
       var y2 = points.ur.y;
-      socket.emit("reQueryFeatures", {'features':map.queryRenderedFeatures([[x1, y1], [x2, y2]],{layers:['Tax Assessment']})});
+      socket.emit("reQueryFeatures", {'features':map.queryRenderedFeatures([[x1, y1], [x2, y2]],{layers:['Tax Assessment', 'Median Income Change']})});
   });
 
   // link layers to buttons
