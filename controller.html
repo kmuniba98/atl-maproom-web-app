@@ -435,15 +435,17 @@
       });
       map.addLayer({
           'id': 'MARTA',
-          'type': 'fill',
+          'type': 'line',
           'source': 'MARTA',
           'source-layer': 'marta-63o7wp',
           'layout': {
               'visibility': 'none',
+              'line-join': 'round',
+              'line-cap': 'round'
           },
           'paint': {
-              'fill-outline-color': '#00ff00',
-              'fill-opacity': 0.5
+              'line-color': 'red',
+              'line-width': 3
           }
       });
   });
