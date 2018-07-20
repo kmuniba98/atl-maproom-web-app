@@ -337,14 +337,14 @@
       });
       // tax layer
       // Change median income later
-      map.addSource('Median Income Change', {
+      map.addSource('ACS', {
           type: 'vector',
           url: 'mapbox://modernlovelace.3jq6hc6x'
       });
       map.addLayer({
           'id': 'Median Income Change',
           'type': 'fill',
-          'source': 'Median Income Change',
+          'source': 'ACS',
           'source-layer': 'merged2-1ylp9s',
           'layout': {
               'visibility': 'none',
@@ -354,9 +354,51 @@
               'fill-color': {
                 property:'P_C_M_I',
                 stops: [
-                  [-51.5, '#00a4d1'],
+                  [-100, '#00a4d1'],
                   [0, '#fffcd6'],
-                  [95.6, '#e92f2f']
+                  [100, '#e92f2f']
+                ]
+              },
+              'fill-opacity': 0.5
+          }
+      });
+      map.addLayer({
+          'id': 'College Educated Change',
+          'type': 'fill',
+          'source': 'ACS',
+          'source-layer': 'merged2-1ylp9s',
+          'layout': {
+              'visibility': 'none',
+          },
+          'paint': {
+              'fill-outline-color': '#f7ff05',
+              'fill-color': {
+                property:'C_C_E_P',
+                stops: [
+                  [-40, '#00a4d1'],
+                  [0, '#fffcd6'],
+                  [40, '#e92f2f']
+                ]
+              },
+              'fill-opacity': 0.5
+          }
+      });
+      map.addLayer({
+          'id': 'White Occupants Change',
+          'type': 'fill',
+          'source': 'ACS',
+          'source-layer': 'merged2-1ylp9s',
+          'layout': {
+              'visibility': 'none',
+          },
+          'paint': {
+              'fill-outline-color': '#f7ff05',
+              'fill-color': {
+                property:'C_W_P__',
+                stops: [
+                  [-30, '#00a4d1'],
+                  [0, '#fffcd6'],
+                  [30, '#e92f2f']
                 ]
               },
               'fill-opacity': 0.5
@@ -393,7 +435,7 @@
   });
 
   // link layers to buttons
-  var toggleableLayerIds = [ 'Tax Assessment', 'Median Income Change', 'MARTA' ];
+  var toggleableLayerIds = [ 'Tax Assessment', 'Median Income Change', 'College Educated Change', 'White Occupants Change', 'MARTA' ];
 
   for (var i = 0; i < toggleableLayerIds.length; i++) {
       var id = toggleableLayerIds[i];
