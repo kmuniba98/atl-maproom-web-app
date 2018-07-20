@@ -365,9 +365,30 @@
               'fill-color': {
                 property:'C_C_E_P',
                 stops: [
-                  [-20, '#00a4d1'],
+                  [-40, '#00a4d1'],
                   [0, '#fffcd6'],
-                  [20, '#e92f2f']
+                  [40, '#e92f2f']
+                ]
+              },
+              'fill-opacity': 0.5
+          }
+      });
+      map.addLayer({
+          'id': 'White Occupants Change',
+          'type': 'fill',
+          'source': 'ACS',
+          'source-layer': 'merged2-1ylp9s',
+          'layout': {
+              'visibility': 'none',
+          },
+          'paint': {
+              'fill-outline-color': '#f7ff05',
+              'fill-color': {
+                property:'C_W_P__',
+                stops: [
+                  [-30, '#00a4d1'],
+                  [0, '#fffcd6'],
+                  [30, '#e92f2f']
                 ]
               },
               'fill-opacity': 0.5
