@@ -61,7 +61,7 @@
         display:none;
       }
 
-      #projectButton {
+      #interactionButton {
           display: block;
           position: absolute;
           top: 10px;
@@ -161,7 +161,7 @@
   </div>
   <br/>
   <button id='changeRect'>Toggle Map Size</button>
-  <!--button id='projectButton'>Project</button!-->
+  <button id='interactionButton'>Lock Map</button>
 
   <script>
 
@@ -263,6 +263,16 @@
                               'activeRectangle':activeRectangle.id, 'endCenters':getEndCenters()})
   });
   */
+
+  document.getElementById('interactionButton').addEventListener('click', function(){
+    map.boxZoom.disable();
+    map.scrollZoom.disable();
+    map.dragPan.disable();
+    map.dragRotate.disable();
+    map.keyboard.disable();
+    map.doubleClickZoom.disable();
+    map.touchZoomRotate.disable();
+  });
 
   function project(){
     var stage = document.getElementById("longRect"), // get canvas element by Id
