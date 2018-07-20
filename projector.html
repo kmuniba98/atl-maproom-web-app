@@ -77,7 +77,6 @@
   var SPoints = [];
   var socket = io('http://maproom.lmc.gatech.edu:8080');
   var projRatio = 0.5
->>>>>>> 5329d34c2cedbbcf9bfc9aeaa519eabdbde46a4e
 
   mapboxgl.accessToken = 'pk.eyJ1IjoibW9kZXJubG92ZWxhY2UiLCJhIjoiY2pmY24zNzhmM2VmaTJ4cDRlNmVoa24wdCJ9.7GBTZc76YFp947kU7A14Gg';
 
@@ -99,18 +98,13 @@
 
     console.log(curBearing + ", " + JSON.stringify(leftCenter) + ", " + JSON.stringify(rightCenter))
 
-<<<<<<< HEAD
-    map.easeTo({center: curCenter, zoom:(curZoom + 2.7), bearing:curBearing})
-    
-    
+
     if (TA){
         currentPoints = map.queryRenderedFeatures({'layers':['Tax Assessment']});
         socket.emit("updateTable", map.queryRenderedFeatures({'layers':['Tax Assessment']}));
         console.log("length of query"); console.log(map.queryRenderedFeatures({'layers':['Tax Assessment']}));
     }
-=======
       map.easeTo({center: {lng: projLong, lat:projLat}, zoom:(curZoom + 2.7), bearing:curBearing, duration:1000})
->>>>>>> 5329d34c2cedbbcf9bfc9aeaa519eabdbde46a4e
   });
 
   socket.on('pushSensorUpdate', function(data) {
@@ -123,14 +117,7 @@
     projLat = leftCenter.lat + (projRatio * (rightCenter.lat - leftCenter.lat))
     projLong = leftCenter.lng + (projRatio * (rightCenter.lng - leftCenter.lng))
 
-<<<<<<< HEAD
-    map.easeTo({center: {lng: projLong, lat:projLat}, zoom:(curZoom + 2.7), bearing:curBearing, duration:2000})
-      
-    //NEEDS IF 
-    //socket.emit("updateTable", map.queryRenderedFeatures({'layers':['Tax Assessment']}));
-=======
     map.easeTo({center: {lng: projLong, lat:projLat}, zoom:(curZoom + 2.7), bearing:curBearing, duration:1000})
->>>>>>> 5329d34c2cedbbcf9bfc9aeaa519eabdbde46a4e
 
   });
 
@@ -146,18 +133,18 @@
   socket.on('pushChangeSize', function(data){ // for toggleRectangle
 
   });
-      
+
   socket.on('addTA', function(data){
     map.setLayoutProperty('Tax Assessment', 'visibility', 'visible');
     TA = true;
   });
-  
+
   socket.on('removeTA', function(data){
     console.log("in removeTA");
     map.setLayoutProperty('Tax Assessment', 'visibility', 'none');
     TA = false;
   });
-      
+
   socket.on("removeMarker", function(data){
     console.log("removing marker");
     console.log(data.removeMarker);
@@ -167,7 +154,7 @@
     var filter = ['match', ['get', 'ID'], -1, true, false];
     map.setFilter("place-highlight", filter);
   });
-      
+
   socket.on("newMarker", function(data){
     console.log("adding marker");
     console.log(data.newMarker);
@@ -176,8 +163,8 @@
     var current = currentPoints[parseInt(data['newMarker'])];//map.queryRenderedFeatures({'layers':['Tax Assessment']})[parseInt(data['newMarker'])].properties.ID;
     var filter = ['match', ['get', 'ID'], current.properties.ID, true, false];
     map.setFilter("place-highlight", filter);
-      
-    
+
+
     document.getElementById("address").innerHTML = current.properties['SITUS'];
     document.getElementById("tenAssess").innerHTML = ("$" + current.properties['2010_assessment'].toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
     document.getElementById("sevenAssess").innerHTML = ("$" + current.properties['2017_assessment'].toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
@@ -193,10 +180,10 @@
     }else{
         document.getElementById("appr_change").innerHTML = (current.properties['appr_change'] +"%");
     }
-      
+
   });
 
- 
+
   var map = new mapboxgl.Map({
     container: 'map', // container id
     center: [-84.27173029708604, 33.76777287243536],
