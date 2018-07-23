@@ -207,11 +207,19 @@
                   easing: easing
               });
           } else if (e.which === 37) { // left
+              map.panBy([-deltaDistance, 0], {
+                  easing: easing
+              });
+          } else if (e.which === 49) { // right
+              map.panBy([deltaDistance, 0], {
+                  easing: easing
+              });
+          } else if (e.which === 65) { // rotate ccw
               map.easeTo({
                       bearing: map.getBearing() - deltaDegrees,
                       easing: easing
               });
-          } else if (e.which === 39) { // right
+          } else if (e.which === 68) { // rotate cw
               map.easeTo({
                       bearing: map.getBearing() + deltaDegrees,
                       easing: easing
