@@ -182,22 +182,26 @@
     direction = data.direction
     var deltaDistance = 1;
     var deltaDegrees = 1;
+    var deltaZoom = 0.1
 
     console.log(direction)
 
-    if (direction === 'up') { // up
+    if (direction === 'up') {
         map.panBy([0, -deltaDistance]);
-    } else if (direction === 'down') { // down
+    } else if (direction === 'down') {
         map.panBy([0, deltaDistance]);
     } else if (direction === 'left') {
         map.panBy([-deltaDistance, 0]);
     } else if (direction === 'right') {
         map.panBy([deltaDistance, 0]);
-    } else if (direction === 'ccw') { // rotate ccw
+    } else if (direction === 'ccw') {
         map.easeTo({bearing: map.getBearing() - deltaDegrees});
-    } else if (direction === 'cw') { // rotate cw
+    } else if (direction === 'cw') {
         map.easeTo({bearing: map.getBearing() + deltaDegrees});
-    }
+    } else if (direction === 'zoom_in') {
+        map.easeTo({zoom: map.getZoom() + deltaZoom});
+    } else if (direction === 'zoom_out') {
+        map.easeTo({zoom: map.getZoom() + deltaZoom});
   });
 
 
