@@ -66,7 +66,7 @@ io.on('connection', function (socket) {
 
   socket.on("projNudge", function(data) {
     console.log(data.direction)
-    //socket.broadcast.emit("newMarker", data);
+    socket.broadcast.emit("projNudge", data);
   });
 
   /*socket.on('selectPTProjector', function(data){

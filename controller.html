@@ -177,7 +177,28 @@
     console.log("New sensor reading: " + data.distance)
   })
 
-  //Added by Annabel - manage highlighted points
+  socket.on('projNudge', function(data) {
+
+    direction = data.direction
+    var deltaDistance = 3;
+    var deltaDegrees = 1;
+
+    if (direction = 'up') { // up
+        map.panBy([0, -deltaDistance]);
+    } else if (direction = 'down') { // down
+        map.panBy([0, deltaDistance]);
+    } else if (direction = 'left') {
+        map.panBy([-deltaDistance, 0]);
+    } else if (direction = 'right') {
+        map.panBy([deltaDistance, 0]);
+    } else if (direction = 'ccw') { // rotate ccw
+        curBearing = curBearing - deltaDegrees
+        map.easeTo(bearing: map.getBearing() - deltaDegrees);
+    } else if (direction = 'cw') { // rotate cw
+        curBearing = curBearing + deltaDegrees
+        map.easeTo(bearing: map.getBearing() + deltaDegrees);
+    }
+  });
 
 
   mapboxgl.accessToken = 'pk.eyJ1IjoibW9kZXJubG92ZWxhY2UiLCJhIjoiY2pmY24zNzhmM2VmaTJ4cDRlNmVoa24wdCJ9.7GBTZc76YFp947kU7A14Gg';
