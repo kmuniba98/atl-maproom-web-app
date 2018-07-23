@@ -192,9 +192,9 @@
     } else if (direction = 'right') {
         map.panBy([deltaDistance, 0]);
     } else if (direction = 'ccw') { // rotate ccw
-        map.easeTo({bearing: map.getBearing() - deltaDegrees)};
+        map.easeTo({bearing: map.getBearing() - deltaDegrees});
     } else if (direction = 'cw') { // rotate cw
-        map.easeTo({bearing: map.getBearing() + deltaDegrees)};
+        map.easeTo({bearing: map.getBearing() + deltaDegrees});
     }
   });
 
