@@ -182,7 +182,7 @@
     direction = data.direction
     var deltaDistance = 1;
     var deltaDegrees = 1;
-    var deltaZoom = 0.1
+    var deltaZoom = 0.03
 
     console.log(direction)
 
@@ -201,7 +201,7 @@
     } else if (direction === 'zoom_in') {
         map.easeTo({zoom: map.getZoom() + deltaZoom});
     } else if (direction === 'zoom_out') {
-        map.easeTo({zoom: map.getZoom() + deltaZoom});
+        map.easeTo({zoom: map.getZoom() - deltaZoom});
     }
   });
 
