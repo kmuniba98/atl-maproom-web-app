@@ -185,17 +185,17 @@
 
     console.log(direction)
 
-    if (direction = 'up') { // up
+    if (direction === 'up') { // up
         map.panBy([0, -deltaDistance]);
-    } else if (direction = 'down') { // down
+    } else if (direction === 'down') { // down
         map.panBy([0, deltaDistance]);
-    } else if (direction = 'left') {
+    } else if (direction === 'left') {
         map.panBy([-deltaDistance, 0]);
-    } else if (direction = 'right') {
+    } else if (direction === 'right') {
         map.panBy([deltaDistance, 0]);
-    } else if (direction = 'ccw') { // rotate ccw
+    } else if (direction === 'ccw') { // rotate ccw
         map.easeTo({bearing: map.getBearing() - deltaDegrees});
-    } else if (direction = 'cw') { // rotate cw
+    } else if (direction === 'cw') { // rotate cw
         map.easeTo({bearing: map.getBearing() + deltaDegrees});
     }
   });
