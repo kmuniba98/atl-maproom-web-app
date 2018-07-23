@@ -65,7 +65,7 @@ io.on('connection', function (socket) {
   });
 
   socket.on("projNudge", function(data) {
-    console.log(data)
+    console.log(data.direction)
     //socket.broadcast.emit("newMarker", data);
   });
 
