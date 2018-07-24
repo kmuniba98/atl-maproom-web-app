@@ -15,7 +15,6 @@
 
 <body>
   <style>
-
       #shortRect {
           width:900px;
           height:300px;
@@ -146,7 +145,6 @@
           margin-right: 5px;
           width: 10px;
       }
-
   </style>
 
   <nav id="menu"></nav>
@@ -167,7 +165,7 @@
 
   var socket = io('http://maproom.lmc.gatech.edu:8080/');
 
-  // set initial values for global variables
+  // global variables
   var activeRectangle = document.getElementById("longRect");
   var rectWidth = 800;
   var rectHeight = 200;
@@ -204,8 +202,7 @@
         map.easeTo({zoom: map.getZoom() - deltaZoom});
     }
   });
-
-
+    
   mapboxgl.accessToken = 'pk.eyJ1IjoibW9kZXJubG92ZWxhY2UiLCJhIjoiY2pmY24zNzhmM2VmaTJ4cDRlNmVoa24wdCJ9.7GBTZc76YFp947kU7A14Gg';
 
   var map = new mapboxgl.Map({
@@ -216,6 +213,28 @@
       center: [-84.3951, 33.7634],
       interactive: true
   });
+
+  /**
+   * the x & y coordinates of a single point
+   * @typedef {Object} Point
+   * @property {number} x - the x coordinate
+   * @property {number} y - the y coordinate
+   */
+
+  /**
+   * the Point of each corner of a box
+   * @typedef {Object} PixelCoordinates
+   * @property {Object} ur - Point of upper right corner
+   * @property {Object} ul - Point of upper left corner
+   * @property {Object} br - Point of bottom right corner
+   * @property {Object} bl - Point of bottom left corner
+   */
+
+  /**
+   * returns the PixelCoordinates of the selection box
+   * @return {PixelCoordinates}
+   *         the x & y coordinates of each corner of the selection box
+   */
 
   function getPixelCoordinates(){
     // get width & height from current rectangle
@@ -229,9 +248,30 @@
     var br = {"x":(center.x + width/2), "y":(center.y + height/2)}; // bottom right
     var bl = {"x":(center.x - width/2), "y":(center.y + height/2)}; // bottom left
     // return an json of pixel coordinates
-    var pixelCoordinates = {"ur":ur, "ul":ul, "br":br, "bl":bl};
-    return pixelCoordinates;
+    return {"ur":ur, "ul":ul, "br":br, "bl":bl};
   }
+
+  /**
+   * the lng & lat coordinates of a single point
+   * @typedef {Object} GeoPoint
+   * @property {number} lng - the lng coordinate
+   * @property {number} lat - the lat coordinate
+   */
+
+  /**
+   * the GeoPoint of each corner of a box
+   * @typedef {Object} GeoCoordinates
+   * @property {Object} ur - GeoPoint of upper right corner
+   * @property {Object} ul - GeoPoint of upper left corner
+   * @property {Object} br - GeoPoint of bottom right corner
+   * @property {Object} bl - GeoPoint of bottom left corner
+   */
+
+   /**
+    * returns the GeoCoordinates of the selection box
+    * @return {GeoCoordinates}
+    *         the lng & lat coordinates of each corner of the selection box
+    */
 
   function getGeoCoordinates(){
     // grab pixel coordinates from helper method
@@ -245,7 +285,18 @@
     return {"ur":ur, "ul":ul, "br":br, "bl":bl};
   }
 
-  // function to get the right & left center
+  /**
+   * the GeoPoint central to the right-most and left-most squares of a box
+   * @typedef {Object} EndCenters
+   * @property {Object} rc - GeoPoint of right center
+   * @property {Object} lc - GeoPoint of left center
+   */
+
+  /**
+   * returns the EndCenters of the selection box
+   * @return {EndCenters}
+   *         the lng & lat coordinates of the right-most and left-most squares of the selection box
+   */
   function getEndCenters(){
     var height = rectHeight;
     // get upper right & upper left pixels
@@ -261,7 +312,10 @@
     return {"rc":rc, "lc":lc};
   }
 
-  // function to toggle rectangle
+  /**
+   * toggle the size of selection rectangle between shortRect & longRect;
+   * CURRENTLY UNUSED - to activate, remove "display:none;" in changeRect CSS
+   */
   function toggleRectangle() {
       var x = document.getElementById("shortRect");
       var y = document.getElementById("longRect");
@@ -280,7 +334,6 @@
       }
   }
 
-  /*
   document.getElementById('changeRect').addEventListener('click', function () {
     toggleRectangle();
     console.log("Sending rectangle change to server...")
@@ -288,8 +341,11 @@
                               'bearing':map.getBearing(), 'geoCoordinates':getGeoCoordinates(),
                               'activeRectangle':activeRectangle.id, 'endCenters':getEndCenters()})
   });
-  */
 
+  /**
+   * when button is clicked, all user interaction (pinch/drag) with map is
+   * disabled to "lock" so map does not become disaligned while drawing
+   */
   document.getElementById('interactionButton').addEventListener('click', function(){
     map.boxZoom.disable();
     map.scrollZoom.disable();
@@ -300,46 +356,10 @@
     map.touchZoomRotate.disable();
   });
 
-  function project(){
-    var stage = document.getElementById("longRect"), // get canvas element by Id
-          ctx = stage.getContext('2d'), // canvas 2d rendering context
-          x = 0, // intial horizontal position of drawn rectangle
-          y = 0 // intial vertical position of drawn rectangle
-          wid = 100, // width of drawn rectangle
-          hei = 200; // height of drawn rectangle
-          console.log("wid=" + wid + "  hei=" + hei);
-
-    // draw rectangle function
-    function drawRect(x,y,wid,hei) {
-        ctx.fillStyle = '#666'; // fill color of rectangle drawn
-        ctx.fillRect(x, y, wid, hei);
-        console.log("redrawn");
-
-    }
-    //ctx.clearRect(0,0, 800, 800);
-    drawRect(x,y,wid,hei); // drawing rectangle on initial load
-    // move rectangle inside the canvas using arrow keys
-    window.onkeydown = function(event) {
-        var keyPr = event.keyCode; // key code of key pressed
-        if(keyPr === 39 && x<=460){
-            x = x+20; // right arrow add 20 from current
-            console.log("right");
-        } else if(keyPr === 37 && x>10){
-            x = x-20; // left arrow subtract 20 from current
-            console.log("left");
-        }
-    /*clearing anything drawn on canvas
-     *comment this below do draw path */
-    ctx.clearRect(0,0, 500, 500);
-    //Drawing rectangle at new position
-    drawRect(x,y,wid,hei);
-    };
-  }
-
-  //document.getElementById('projectButton').addEventListener('click', function () {
-  //  project();
-  //});
-
+  /**
+   * adds BeltLine and data layer sources from MapBox GL Studio
+   * and then adds the layers to the map to be toggled
+   */
   map.on('load', function () {
       // beltline layer
       map.addSource('beltline', {
@@ -453,6 +473,10 @@
       });
   });
 
+  /**
+   * when the user interacts with the map (pinch/drag to move, zoom, or rotate)
+   * all changes are emitted to the server to update the view in Projector
+   */
   map.on('moveend', function (e) {
         console.log("Sending move change to server...")
         socket.emit('mapUpdate', {'center': map.getCenter(), 'zoom': map.getZoom(),

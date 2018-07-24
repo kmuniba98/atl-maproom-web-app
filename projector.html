@@ -218,6 +218,11 @@
       }, true);
   });
 
+  map.on('moveend', function (e) {
+        socket.emit('projNudge', {'center': curCenter,
+                                  'bearing': curBearing})
+  });
+
   map.on('load', function () {
       // beltline layer
       map.addSource('beltline', {
