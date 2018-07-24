@@ -58,9 +58,9 @@ Add additional notes about how to deploy this on a live system
 
 ## Built With
 
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
+* [Socket.io](https://socket.io/) - Real-time bidirectional event-based communication
+* [MapBox GL](https://www.mapbox.com/mapbox-gl-js/api/) - Open-source libraries for embedding maps
+* [Node.js](https://nodejs.org/en/) - JavaScript runtime
 
 ## Contributing
 
@@ -83,6 +83,6 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 ## Acknowledgments
 
 * Dr. Ellen Zegura, Dr. Chris Le Dantec, Dr. Amanda Meng, Dr. Alex Godwin, Francella Tonge and the Civic Data Science REU
-* Jer Thorp, Emily Catedral, Chris Anderson, Jane Friedhoff, and the Office for Creative Research and St. Louis Center for Creative Arts
+* Jer Thorp, Emily Catedral, and the Office for Creative Research and St. Louis Center for Creative Arts
 * Melanie Richard and the support staff of the School of Literature, Media, and Communication
 * Digital Integrative Liberal Arts Center at the Georgia Institute of Technology Ivan Allen College of Liberal Arts
