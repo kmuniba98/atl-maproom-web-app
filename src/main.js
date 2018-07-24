@@ -18,19 +18,19 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 
 app.get('/', function(req, res) {
-  res.sendFile(__dirname + '../html/index.html');
+  res.sendFile(__dirname + '/../html/index.html');
 });
 
 app.get('/controller.html', function(req, res){
-  res.sendFile(__dirname + '../html/controller.html');
+  res.sendFile(__dirname + '/../html/controller.html');
 });
 
 app.get('/projector.html', function(req, res){
-  res.sendFile(__dirname + '../html/projector.html');
+  res.sendFile(__dirname + '/../html/projector.html');
 });
 
 app.get('/table.html', function(req, res){
-  res.sendFile(__dirname + '../html/table.html');
+  res.sendFile(__dirname + '/../html/table.html');
 });
 
 app.get('/controller.js', function(req, res){
