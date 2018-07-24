@@ -64,9 +64,11 @@ Add additional notes about how to deploy this on a live system
 
 ## Authors
 
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
+* **Muniba Khan** - *Initial work* - [kmuniba98](https://github.com/kmuniba98)
+* **Christopher Polack** - *Initial work* - [cfpolack](https://github.com/cfpolack)
+* **Annabel Rothschild** - *Initial work* - [annabelrothschild](https://github.com/annabelrothschild)
 
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/kmuniba98/Atlanta-Map-Room/contributors) who participated in this project.
 
 ## Acknowledgments
 
