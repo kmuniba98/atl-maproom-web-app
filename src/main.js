@@ -49,11 +49,6 @@ io.on('connection', function (socket) {
 
   // Fired when map is updated on controller
   socket.on('mapUpdate', function (data) {
-    console.log("Map updated, pushing...");
-
-    console.log(data.center)
-    console.log(data.zoom)
-
     socket.broadcast.emit('pushMapUpdate', data)
   });
 
@@ -91,13 +86,11 @@ io.on('connection', function (socket) {
 
   // Fired when a layer is hidden on the controller
   socket.on('hideLayer', function(data) {
-    console.log(data.clickedLayer + " Layer hidden");
     socket.broadcast.emit('pushHideLayer', data)
   });
 
   // Fired when a layer is shown on the controller
   socket.on('showLayer', function(data) {
-    console.log(data.clickedLayer + " Layer shown");
     socket.broadcast.emit('pushShowLayer', data)
   });
 
@@ -108,7 +101,6 @@ io.on('connection', function (socket) {
 
   // Fired when a new sensor reading is received from the sensor server
   socket.on('sensorUpdate', function(data) {
-    console.log("Sensor updated: " + data.distance);
     socket.broadcast.emit('pushSensorUpdate', data);
   })
 });
