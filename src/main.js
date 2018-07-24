@@ -38,7 +38,7 @@ app.get('/controller.js', function(req, res){
 });
 
 app.get('/projector.js', function(req, res){
-  res.sendFile(__dirname + '/controller.js');
+  res.sendFile(__dirname + '/projector.js');
 });
 
 app.get('/table.js', function(req, res){
