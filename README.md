@@ -82,7 +82,7 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 
 ## Acknowledgments
 
-* Dr. Ellen Zegura, Dr. Chris Le Dantec, Dr. Amanda Meng, Dr. Alex Godwin, Francella Tonge and all of the Civic Data Science REU mentors and staff
-* Jer Thorp, Emily Catedral, Chris Anderson, Jane Friedhoff, and the teams at the Office for Creative Research and St. Louis Center for Creative Arts
-* Melanie Richard and the support staff of the Georgia Institute of Technology School of Literature, Media, and Communication
+* Dr. Ellen Zegura, Dr. Chris Le Dantec, Dr. Amanda Meng, Dr. Alex Godwin, Francella Tonge and the Civic Data Science REU
+* Jer Thorp, Emily Catedral, Chris Anderson, Jane Friedhoff, and the Office for Creative Research and St. Louis Center for Creative Arts
+* Melanie Richard and the support staff of the School of Literature, Media, and Communication
 * Digital Integrative Liberal Arts Center at the Georgia Institute of Technology Ivan Allen College of Liberal Arts
