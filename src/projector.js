@@ -32,7 +32,7 @@ socket.on('pushMapUpdate', function(data) {
   console.log(curBearing + ", " + JSON.stringify(leftCenter) + ", " + JSON.stringify(rightCenter))
 
 
-  if (TA){
+  if (taxAssessmentEnabled){
       currentPoints = map.queryRenderedFeatures({'layers':['Tax Assessment']});
       socket.emit("updateTable", map.queryRenderedFeatures({'layers':['Tax Assessment']}));
       console.log("length of query"); console.log(map.queryRenderedFeatures({'layers':['Tax Assessment']}));
