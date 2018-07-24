@@ -199,34 +199,22 @@
       map.getCanvas().addEventListener('keydown', function(e) {
           e.preventDefault();
           if (e.which === 38) { // up
-              map.panBy([0, -deltaDistance], {
-                  easing: easing
-              });
+            socket.emit('projNudge', {'direction': 'up'})
           } else if (e.which === 40) { // down
-              map.panBy([0, deltaDistance], {
-                  easing: easing
-              });
+            socket.emit('projNudge', {'direction': 'down'})
           } else if (e.which === 37) { // left
-              map.panBy([-deltaDistance, 0], {
-                  easing: easing
-              });
+            socket.emit('projNudge', {'direction': 'left'})
           } else if (e.which === 39) { // right
-              map.panBy([deltaDistance, 0], {
-                  easing: easing
-              });
+            socket.emit('projNudge', {'direction': 'right'})
           } else if (e.which === 68) { // rotate ccw
-              curBearing = curBearing - deltaDegrees
-              map.easeTo({
-                      bearing: map.getBearing() - deltaDegrees,
-                      easing: easing
-              });
+            socket.emit('projNudge', {'direction': 'ccw'})
           } else if (e.which === 65) { // rotate cw
-              curBearing = curBearing + deltaDegrees
-              map.easeTo({
-                      bearing: map.getBearing() + deltaDegrees,
-                      easing: easing
-              });
-          }
+            socket.emit('projNudge', {'direction': 'cw'})
+          } else if (e.which === 87) { // zoom in
+            socket.emit('projNudge', {'direction': 'zoom_in'})
+          } else if (e.which === 83) { // zoom out
+            socket.emit('projNudge', {'direction': 'zoom_out'})
+         }
       }, true);
   });
 
