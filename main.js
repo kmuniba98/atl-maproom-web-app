@@ -37,6 +37,10 @@ app.get('/controller.js', function(req, res){
   res.sendFile(__dirname + '/controller.js');
 });
 
+app.get('/projector.js', function(req, res){
+  res.sendFile(__dirname + '/controller.js');
+});
+
 io.on('connection', function (socket) {
 
   socket.on('mapUpdate', function (data) {
