@@ -1,11 +1,11 @@
-
+// Define socket address (Ubuntu server address)
 var socket = io('http://maproom.lmc.gatech.edu:8080/');
 
-// global variables
+// Global Variables
 var activeRectangle = document.getElementById("longRect");
 var rectWidth = 800;
 var rectHeight = 200;
-var TA = false;
+var taxAssessmentEnabled = false;
 
 socket.on('pushSensorUpdate', function(data) {
   console.log("New sensor reading: " + data.distance)
@@ -342,14 +342,14 @@ for (var i = 0; i < toggleableLayerIds.length; i++) {
               socket.emit('showLayer', {'clickedLayer':clickedLayer})
           };
         }else{
-            if (TA){
-                console.log("removing TA");
+            if (taxAssessmentEnabled){
+                console.log("Removing tax assessments...");
                 socket.emit("removeTA", {'info':'none'});
-                TA = false;
+                taxAssessmentEnabled = false;
                 this.className = "";
             }else{
                 socket.emit("addTA", {'info':'none'});
-                TA = true;
+                taxAssessmentEnabled = true;
                 this.className = 'active';
             }
         }
