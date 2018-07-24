@@ -18,8 +18,6 @@ socket.on('projNudge', function(data) {
   var deltaDegrees = 1;
   var deltaZoom = 0.03
 
-  console.log(direction)
-
   if (direction === 'up') {
       map.panBy([0, -deltaDistance]);
   } else if (direction === 'down') {
