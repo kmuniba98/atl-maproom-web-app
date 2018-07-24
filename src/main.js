@@ -62,14 +62,17 @@ io.on('connection', function (socket) {
     socket.broadcast.emit("removeTA", data);
   });
 
+  // Fired when the table
   socket.on("updateTable", function(data){
     socket.broadcast.emit("updateTable", data);
   });
 
+  // Fired when a tax assessment entry is deselected from the controller
   socket.on("removeMarker", function(data){
     socket.broadcast.emit("removeMarker", data);
   });
 
+  // Fired when a tax assessment entry is selected on the controller
   socket.on("newMarker", function(data){
     socket.broadcast.emit("newMarker", data);
   });
