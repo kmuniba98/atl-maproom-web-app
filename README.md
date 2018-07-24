@@ -64,7 +64,7 @@ Add additional notes about how to deploy this on a live system
 
 ## Authors
 
-* **Muniba Khan** - *Initial work* - [kmuniba98](https://github.com/kmuniba98)
+* **Muniba M. Khan** - *Initial work* - [kmuniba98](https://github.com/kmuniba98)
 * **Christopher Polack** - *Initial work* - [cfpolack](https://github.com/cfpolack)
 * **Annabel Rothschild** - *Initial work* - [annabelrothschild](https://github.com/annabelrothschild)
 
