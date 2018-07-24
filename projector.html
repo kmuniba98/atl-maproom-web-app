@@ -207,17 +207,32 @@
                   easing: easing
               });
           } else if (e.which === 37) { // left
+              map.panBy([-deltaDistance, 0], {
+                  easing: easing
+              });
+          } else if (e.which === 39) { // right
+              map.panBy([deltaDistance, 0], {
+                  easing: easing
+              });
+          } else if (e.which === 68) { // rotate ccw
+              curBearing = curBearing - deltaDegrees
               map.easeTo({
                       bearing: map.getBearing() - deltaDegrees,
                       easing: easing
               });
-          } else if (e.which === 39) { // right
+          } else if (e.which === 65) { // rotate cw
+              curBearing = curBearing + deltaDegrees
               map.easeTo({
                       bearing: map.getBearing() + deltaDegrees,
                       easing: easing
               });
           }
       }, true);
+  });
+
+  map.on('moveend', function (e) {
+        socket.emit('projNudge', {'center': curCenter,
+                                  'bearing': curBearing})
   });
 
   map.on('load', function () {
