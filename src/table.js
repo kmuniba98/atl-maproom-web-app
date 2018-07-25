@@ -1,78 +1,118 @@
 var socket = io('http://maproom.lmc.gatech.edu:8080/');
 
-function normalize(data) {
-  var result = [];
-  count = 0
-  for (var row in data) {
-      var address = data[row].properties["SITUS"];
-      var tenAssess = data[row].properties["2010_assessment"];
-      var sevenAssess = data[row].properties["2017_assessment"];
-      var changeAssess = data[row].properties["assess_change"];
-      var tenAppr = data[row].properties["2010_appr"];
-      var sevenAppr = data[row].properties["2017_appr"];
-      var changeAppr = data[row].properties["appr_change"];
-      var ID = data[row].properties["ID"];
-
-      result.push([ID, address, tenAssess, sevenAssess, changeAssess, tenAppr, sevenAppr, changeAppr]);
-  }
-  return result;
-};
-
-
 socket.on('updateTable', function(data) {
-  console.log("updating table");
-  console.log(data);
-  console.log(normalize(data.features));
-  $("table").DataTable().destroy();
-  var datatable = $("table").DataTable({
-      //removed data.features, use in
-      "aaData":normalize(data),
-      "aoColums":[
-          {title: "ID", data: "ID"},
-          {title: "Address", data: "SITUS"},
-          {title: "2010 Assessment", data: "2010_assessment"},
-          {title: "2017 Assessment", data: "2017_assessment"},
-          {title: "Assessment Change", data: "assess_change"},
-          {title: "2010 Appraisal", data: "2010_appr"},
-          {title: "2017 Appraisal", data: "2017_appr"},
-          {title: "Appraisal Change", data: "appr_change"},
-      ],
-      "info":false,
-      "lengthChange": false,
-      "paging": false,
-      "order":[],
+    console.log("updating table");
+    console.log(data);
+    $("table").DataTable().destroy();
+    var datatable = $("table").DataTable({
+        "aaData":data,
+        "aoColums":[
+            {title: "ID"},
+            {title: "ParcelID"},
+            {title: "Address"},
+            {title: "Assessment % Change"},
+            {title: "Appraisal % Change"},
+            {title: "OBJECTID"},
+            {title: "TaxYear"},
+            {title: "Address"},
+            {title: "AddrNumber"},
+            {title: "AddrPreDir"},
+            {title: "AddrStreet"},
+            {title: "AddrSuffix"},
+            {title: "AddrPosDir"},
+            {title: "AddrUntTyp"},
+            {title: "AddrUnit"},
+            {title: "Owner"},
+            {title: "OwnerAddr1"},
+            {title: "OwnerAddr2"},
+            {title: "TaxDist"},
+            {title: "TotAssess"},
+            {title: "LandAssess"},
+            {title: "ImprAssess"},
+            {title: "TotAppr"},
+            {title: "LandAppr"},
+            {title: "ImprAppr"},
+            {title: "LUCode"},
+            {title: "ClassCode"},
+            {title: "ExCode"},
+            {title: "LivUnits"},
+            {title: "LandAcres"},
+            {title: "NbrHood"},
+            {title: "Subdiv"},
+            {title: "SubdivNum"},
+            {title: "SubdivLot"},
+            {title: "SubdivBlck"},
+            {title: "FeatureID"},
+            {title: "SHAPESTArea"},
+            {title: "SHAPESTLength"},
+            {title: "OBJECTID"},
+            {title: "DIGEST"},
+            {title: "SITUS"},
+            {title: "TAXPIN"},
+            {title: "ATRPIN"},
+            {title: "TAX_DISTR"},
+            {title: "OWNER1"},
+            {title: "OWNER2"},
+            {title: "ADD2"},
+            {title: "ADD3"},
+            {title: "ADD4"},
+            {title: "ADD5"},
+            {title: "LUC"},
+            {title: "NBHD"},
+            {title: "PROP_CLASS"},
+            {title: "CLASS"},
+            {title: "TOT_APPR"},
+            {title: "TOT_ASSESS"},
+            {title: "IMPR_APPR"},
+            {title: "LAND_APPR"},
+            {title: "FUL_EX_COD"},
+            {title: "VAL_ACRES"},
+            {title: "STRUCT_FLR"},
+            {title: "STRUCT_YR"},
+            {title: "TIEBACK"},
+            {title: "TAXYEAR"},
+            {title: "STATUS_COD"},
+            {title: "LIV_UNITS"},
+            {title: "PCODE"},
+            {title: "UNIT_NUM"},
+            {title: "GID"},
+            {title: "EXTVER"},
+            {title: "ShapeSTArea"},
+            {title: "ShapeSTLength"}
+        ],
+        "info":false,
+        "lengthChange": false,
+        "paging": false,
+        "order":[],
+    });
   });
-});
 
 
-$(document).ready( function () {
-  $('table').DataTable({
-      "info":false,
-      "lengthChange": false,
-      "paging": false,
-      "display": true,
-});
+  $(document).ready( function () {
+    $('table').DataTable({
+        "info":false,
+        "lengthChange": false,
+        "paging": false,
+        "display": true,
+  });
 
-var currClick = -1;
-  $('table tbody').on( 'click', 'tr', function () {
-    var tab = $('table').DataTable();
-    if ($(this).hasClass('selected')){
-      $(this).removeClass('selected');
-        socket.emit("removeMarker", {'removeMarker':tab.row(this).index()});
-      currClick = -1;
-      console.log("resetting currClick");
-    }
-    else{
-        if (currClick > -1){
-            console.log(currClick);
-            socket.emit("removeMarker", {'removeMarker':currClick});
-        };
-        //need to remove from selected class
-        tab.$('tr.selected').removeClass('selected');
-        currClick = tab.row(this).index();
-        console.log(currClick);
-        $(this).addClass('selected');
-        socket.emit("newMarker", {'newMarker':tab.row(this).index()});
-    }
-});
-});
+  var currClick = -1;
+    $('table tbody').on( 'click', 'tr', function () {
+      var tab = $('table').DataTable();
+      if ($(this).hasClass('selected')){
+        $(this).removeClass('selected');
+          socket.emit("removeMarker", {'removeMarker':tab.row(this).data()[0]});
+        currClick = -1;
+      }
+      else{
+          if (currClick > -1){
+              socket.emit("removeMarker", {'removeMarker':tab.row(currClick).data()[0]});
+          };
+          //need to remove from selected class
+          tab.$('tr.selected').removeClass('selected');
+          currClick = tab.row(this).index();
+          $(this).addClass('selected');
+          socket.emit("newMarker", {'newMarker':tab.row(this).data(), 'index':tab.row(this).index()});
+      }
+  });
+  });
