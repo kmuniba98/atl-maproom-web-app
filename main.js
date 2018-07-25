@@ -53,7 +53,9 @@ io.on('connection', function (socket) {
   });
 
   socket.on("updateTable", function(data){
-    socket.broadcast.emit("updateTable", data);
+    getPoints(data).then(function(results){
+      socket.broadcast.emit("updateTable", results);
+    })
   });
 
   socket.on("removeMarker", function(data){
@@ -92,3 +94,23 @@ io.on('connection', function (socket) {
   })
 
 });
+
+
+
+
+async function getPoints(points){
+  var ids = [];
+  for (var i = 0; i < points.length; i++){
+    console.log(points[i]);
+    ids.push(points[i].properties.id);
+  };
+  var tableData = [];
+  for (var j=0; j<ids.length; j++){
+    const nthline = require('nthline')
+      , filePath = "fullInformationFinal.csv"
+      , rowNumber = ids[j]
+    tableData.push((await nthline(rowNumber, filePath)).split(","));
+  }
+  let currentSelection = await tableData;
+  return currentSelection;
+}
