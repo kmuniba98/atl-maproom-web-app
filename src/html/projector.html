@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset=utf-8 />
+  <title>Projector</title>
+  <script src='https://api.mapbox.com/mapbox-gl-js/v0.46.0/mapbox-gl.js'></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <link href='https://api.mapbox.com/mapbox-gl-js/v0.46.0/mapbox-gl.css' rel='stylesheet' />
+  <style>
+    body { margin:0; padding:0; }
+    #map { position:absolute; top:0; bottom:0; width:75%;}
+  </style>
+</head>
+
+<body style="background-color:black">
+  <style>
+      @import url('https://fonts.googleapis.com/css?family=PT+Mono|PT+Serif');
+
+        h6 {
+            font-family: 'PT Mono', monospace;
+            padding-left: 80%;
+            line-height: 10px;
+            font-size: 8px;
+            padding-bottom: 10px;
+        }
+
+        h5 {
+            font-family: 'PT Serif', serif;;
+            padding-left: 80%;
+            line-height: 12px;
+            font-size: 10px;
+            color: white;
+        }
+        span {
+          padding-top: 0px;
+          padding-bottom: 0px;
+          margin-bottom: 0px;
+          margin-top: 0px;
+          line-height: 10px;
+          color: red;
+        }
+  </style>
+
+  <div id='map' style="background-color:black"></div>
+  <div id="point_text" style="max-height:100%;color:white;background-color:black">
+   <h5 id=ID_>ID</h5>
+    <h6 id=ID>ID</h6><span></span>
+    <h5 id=Latitude_>Latitude</h5>
+    <h6 id=Latitude>Latitude</h6><span></span>
+    <h5 id=Longitude_>Longitude</h5>
+    <h6 id=Longitude>Longitude</h6><span></span>
+    <h5 id=ParcelID_>ParcelID</h5>
+    <h6 id=ParcelID>ParcelID</h6><span></span>
+    <h5 id=Address_>Address</h5>
+    <h6 id=Address>Address</h6><span></span>
+    <h5 id=AssessChange_>AssessChange</h5>
+    <h6 id=AssessChange>AssessChange</h6><span></span>
+    <h5 id=ApprChange_>ApprChange</h5>
+    <h6 id=ApprChange>ApprChange</h6><span></span>
+    <h5 id=OBJECTID_17_>OBJECTID_17</h5>
+    <h6 id=OBJECTID_17>OBJECTID_17</h6><span></span>
+    <h5 id=TaxYear_>TaxYear</h5>
+    <h6 id=TaxYear>TaxYear</h6><span></span>
+    <h5 id=Address_17_>Address_17</h5>
+    <h6 id=Address_17>Address_17</h6><span></span>
+    <h5 id=AddrNumber_>AddrNumber</h5>
+    <h6 id=AddrNumber>AddrNumber</h6><span></span>
+    <h5 id=AddrPreDir_>AddrPreDir</h5>
+    <h6 id=AddrPreDir>AddrPreDir</h6><span></span>
+    <h5 id=AddrStreet_>AddrStreet</h5>
+    <h6 id=AddrStreet>AddrStreet</h6><span></span>
+    <h5 id=AddrSuffix_>AddrSuffix</h5>
+    <h6 id=AddrSuffix>AddrSuffix</h6><span></span>
+    <h5 id=AddrPosDir_>AddrPosDir</h5>
+    <h6 id=AddrPosDir>AddrPosDir</h6><span></span>
+    <h5 id=AddrUntTyp_>AddrUntTyp</h5>
+    <h6 id=AddrUntTyp>AddrUntTyp</h6><span></span>
+    <h5 id=AddrUnit_>AddrUnit</h5>
+    <h6 id=AddrUnit>AddrUnit</h6><span></span>
+    <h5 id=Owner_>Owner</h5>
+    <h6 id=Owner>Owner</h6><span></span>
+    <h5 id=OwnerAddr1_>OwnerAddr1</h5>
+    <h6 id=OwnerAddr1>OwnerAddr1</h6><span></span>
+    <h5 id=OwnerAddr2_>OwnerAddr2</h5>
+    <h6 id=OwnerAddr2>OwnerAddr2</h6><span></span>
+    <h5 id=TaxDist_>TaxDist</h5>
+    <h6 id=TaxDist>TaxDist</h6><span></span>
+    <h5 id=TotAssess_>TotAssess</h5>
+    <h6 id=TotAssess>TotAssess</h6><span></span>
+    <h5 id=LandAssess_>LandAssess</h5>
+    <h6 id=LandAssess>LandAssess</h6><span></span>
+    <h5 id=ImprAssess_>ImprAssess</h5>
+    <h6 id=ImprAssess>ImprAssess</h6><span></span>
+    <h5 id=TotAppr_>TotAppr</h5>
+    <h6 id=TotAppr>TotAppr</h6><span></span>
+    <h5 id=LandAppr_>LandAppr</h5>
+    <h6 id=LandAppr>LandAppr</h6><span></span>
+    <h5 id=ImprAppr_>ImprAppr</h5>
+    <h6 id=ImprAppr>ImprAppr</h6><span></span>
+    <h5 id=LUCode_>LUCode</h5>
+    <h6 id=LUCode>LUCode</h6><span></span>
+    <h5 id=ClassCode_>ClassCode</h5>
+    <h6 id=ClassCode>ClassCode</h6><span></span>
+    <h5 id=ExCode_>ExCode</h5>
+    <h6 id=ExCode>ExCode</h6><span></span>
+    <h5 id=LivUnits_>LivUnits</h5>
+    <h6 id=LivUnits>LivUnits</h6><span></span>
+    <h5 id=LandAcres_>LandAcres</h5>
+    <h6 id=LandAcres>LandAcres</h6><span></span>
+    <h5 id=NbrHood_>NbrHood</h5>
+    <h6 id=NbrHood>NbrHood</h6><span></span>
+    <h5 id=Subdiv_>Subdiv</h5>
+    <h6 id=Subdiv>Subdiv</h6><span></span>
+    <h5 id=SubdivNum_>SubdivNum</h5>
+    <h6 id=SubdivNum>SubdivNum</h6><span></span>
+    <h5 id=SubdivLot_>SubdivLot</h5>
+    <h6 id=SubdivLot>SubdivLot</h6><span></span>
+    <h5 id=SubdivBlck_>SubdivBlck</h5>
+    <h6 id=SubdivBlck>SubdivBlck</h6><span></span>
+    <h5 id=FeatureID_>FeatureID</h5>
+    <h6 id=FeatureID>FeatureID</h6><span></span>
+    <h5 id=SHAPESTArea_>SHAPESTArea</h5>
+    <h6 id=SHAPESTArea>SHAPESTArea</h6><span></span>
+    <h5 id=SHAPESTLength_>SHAPESTLength</h5>
+    <h6 id=SHAPESTLength>SHAPESTLength</h6><span></span>
+    <h5 id=OBJECTID_10_>OBJECTID_10</h5>
+    <h6 id=OBJECTID_10>OBJECTID_10</h6><span></span>
+    <h5 id=DIGEST_>DIGEST</h5>
+    <h6 id=DIGEST>DIGEST</h6><span></span>
+    <h5 id=SITUS_>SITUS</h5>
+    <h6 id=SITUS>SITUS</h6><span></span>
+    <h5 id=TAXPIN_>TAXPIN</h5>
+    <h6 id=TAXPIN>TAXPIN</h6><span></span>
+    <h5 id=ATRPIN_>ATRPIN</h5>
+    <h6 id=ATRPIN>ATRPIN</h6><span></span>
+    <h5 id=TAX_DISTR_>TAX_DISTR</h5>
+    <h6 id=TAX_DISTR>TAX_DISTR</h6><span></span>
+    <h5 id=OWNER1_>OWNER1</h5>
+    <h6 id=OWNER1>OWNER1</h6><span></span>
+    <h5 id=OWNER2_>OWNER2</h5>
+    <h6 id=OWNER2>OWNER2</h6><span></span>
+    <h5 id=ADD2_>ADD2</h5>
+    <h6 id=ADD2>ADD2</h6><span></span>
+    <h5 id=ADD3_>ADD3</h5>
+    <h6 id=ADD3>ADD3</h6><span></span>
+    <h5 id=ADD4_>ADD4</h5>
+    <h6 id=ADD4>ADD4</h6><span></span>
+    <h5 id=ADD5_>ADD5</h5>
+    <h6 id=ADD5>ADD5</h6><span></span>
+    <h5 id=LUC_>LUC</h5>
+    <h6 id=LUC>LUC</h6><span></span>
+    <h5 id=NBHD_>NBHD</h5>
+    <h6 id=NBHD>NBHD</h6><span></span>
+    <h5 id=PROP_CLASS_>PROP_CLASS</h5>
+    <h6 id=PROP_CLASS>PROP_CLASS</h6><span></span>
+    <h5 id=CLASS_>CLASS</h5>
+    <h6 id=CLASS>CLASS</h6><span></span>
+    <h5 id=TOT_APPR_>TOT_APPR</h5>
+    <h6 id=TOT_APPR>TOT_APPR</h6><span></span>
+    <h5 id=TOT_ASSESS_>TOT_ASSESS</h5>
+    <h6 id=TOT_ASSESS>TOT_ASSESS</h6><span></span>
+    <h5 id=IMPR_APPR_>IMPR_APPR</h5>
+    <h6 id=IMPR_APPR>IMPR_APPR</h6><span></span>
+    <h5 id=LAND_APPR_>LAND_APPR</h5>
+    <h6 id=LAND_APPR>LAND_APPR</h6><span></span>
+    <h5 id=FUL_EX_COD_>FUL_EX_COD</h5>
+    <h6 id=FUL_EX_COD>FUL_EX_COD</h6><span></span>
+    <h5 id=VAL_ACRES_>VAL_ACRES</h5>
+    <h6 id=VAL_ACRES>VAL_ACRES</h6><span></span>
+    <h5 id=STRUCT_FLR_>STRUCT_FLR</h5>
+    <h6 id=STRUCT_FLR>STRUCT_FLR</h6><span></span>
+    <h5 id=STRUCT_YR_>STRUCT_YR</h5>
+    <h6 id=STRUCT_YR>STRUCT_YR</h6><span></span>
+    <h5 id=TIEBACK_>TIEBACK</h5>
+    <h6 id=TIEBACK>TIEBACK</h6><span></span>
+    <h5 id=TAXYEAR_>TAXYEAR</h5>
+    <h6 id=TAXYEAR>TAXYEAR</h6><span></span>
+    <h5 id=STATUS_COD_>STATUS_COD</h5>
+    <h6 id=STATUS_COD>STATUS_COD</h6><span></span>
+    <h5 id=LIV_UNITS_>LIV_UNITS</h5>
+    <h6 id=LIV_UNITS>LIV_UNITS</h6><span></span>
+    <h5 id=PCODE_>PCODE</h5>
+    <h6 id=PCODE>PCODE</h6><span></span>
+    <h5 id=UNIT_NUM_>UNIT_NUM</h5>
+    <h6 id=UNIT_NUM>UNIT_NUM</h6><span></span>
+    <h5 id=GID_>GID</h5>
+    <h6 id=GID>GID</h6><span></span>
+    <h5 id=EXTVER_>EXTVER</h5>
+    <h6 id=EXTVER>EXTVER</h6><span></span>
+    <h5 id=ShapeSTArea_>ShapeSTArea</h5>
+    <h6 id=ShapeSTArea>ShapeSTArea</h6><span></span>
+    <h5 id=ShapeSTLength_>ShapeSTLength</h5>
+    <h6 id=ShapeSTLength>ShapeSTLength</h6><span></span>
+  </div>
+
+  <script type="text/javascript" src="projector.js"> </script>
+
+</body>
+</html>
