@@ -65,6 +65,7 @@ io.on('connection', function (socket) {
   // Fired when the table
   socket.on("updateTable", function(data){
     getPoints(data).then(function(results){
+      console.log("reached")
       socket.broadcast.emit("updateTable", results);
     })
   });
