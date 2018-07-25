@@ -6,21 +6,12 @@ To document and reflect upon the connections and disjunctions between civic data
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
 
-### Prerequisites
-
-What things you need to install the software and how to install them
-
-* node.js
-
-* ubuntu vm
-
-```
-Give examples
-```
-
 ### Installing
 
 After cloning the repository, ensure that node and npm are installed on your machine. Change directory into the main folder and run command `npm install` to install dependencies.
+
+## Socket.io
+A major dependency used in this system is **socket.io**, which provides realtime communication between the different components of the application. The general model consists of different components publishing changes or updates to the socket, which is then processed by the main server and broadcast back out the other components.
 
 ### Starting the Server
 
@@ -28,8 +19,13 @@ Navigate to the main directory and then move down one level to the /src folder. 
 
 Once the server is running, you should be able to navigate to the page in a web browser (http://localhost:8080) in order to view the index.html page, which shows links to the Controller, Projector, and Table pages. These three pages can be opened as separate tabs or windows in order to test the system.
 
-### Tests
-
+## Testing
+With all of the pages open in a browser, basic functionality testing should include the following:
+1. Updating the map position on the Controller by dragging should update the map view on the Projector
+2. Toggling a layer on the Controller should cause the corresponding layer to be shown or hidden from the Projector
+3. Enabling the Tax Assessment layer and zooming in to a smaller region should cause property entries to appear on the Table page
+4. Selecting an entry on the Table page should highlight the property in yellow and display detailed information on the Projector
+5. (with **sensor_server** running) Moving the projector should smoothly pan the Projector view along the rectangle guide.
 
 ## Components
 
