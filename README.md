@@ -10,7 +10,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 After cloning the repository, ensure that node and npm are installed on your machine. Change directory into the main folder and run command `npm install` to install dependencies.
 
-## Socket.io
+#### Socket.io
 A major dependency used in this system is **socket.io**, which provides realtime communication between the different components of the application. The general model consists of different components publishing changes or updates to the socket, which is then processed by the main server and broadcast back out the other components.
 
 ### Starting the Server
@@ -19,7 +19,7 @@ Navigate to the main directory and then move down one level to the /src folder. 
 
 Once the server is running, you should be able to navigate to the page in a web browser (http://localhost:8080) in order to view the index.html page, which shows links to the Controller, Projector, and Table pages. These three pages can be opened as separate tabs or windows in order to test the system.
 
-## Testing
+#### Testing
 With all of the pages open in a browser, basic functionality testing should include the following:
 1. Updating the map position on the Controller by dragging should update the map view on the Projector
 2. Toggling a layer on the Controller should cause the corresponding layer to be shown or hidden from the Projector
@@ -34,12 +34,12 @@ This section describes the primary components of the system in detail.
 ### Controller
 This component consists of two files, **controller.html** and **controller.js**. The Controller is the component of the system that is responsible for choosing the initial map area and toggling layers. When a new area of the map is selected in the Controller map view, the change is sent to the server so that it can be updated on the Projector. The toggling of map layers using the buttons on the right will also update the visible layers on the Projector. There is only one situation in which the Controller is not responsible for movement, which is a Projector nudge.
 
-The Controller view includes a red rectangle that is used to specify the area shown by the projector. This should be used as a guide to control which areas will be shown at the two ends of the final drawn map.
+The Controller view includes a red rectangle that is used to specify the area shown by the projector. This should be used as a guide to control which areas will be shown at the two ends of the final drawn map. There is also a lock button in the upper left corner that will *permanently* lock the map view once a region has been selected for drawing. This prevents unintentional shifting of the map while it is being drawn. Layers can still be toggled and the Projector nudge function is still enabled while the map is locked. In order to unlock the map, the page must be refreshed.
 
 ### Projector
-This component consists of two files , **projector.html** and **projector.js**. This webpage is designed to provide a simplified map view that would be projected onto the drawing surface. Using data from the sensor supplied by the **sensor_server** (code in separate repository), the projector calculates the current view within the rectangle defined by the Controller as a function of distance between the two end points. For example, when the Projector is pushed to one end of the track, the map will show the leftmost portion of the Controller guide rectangle. As the projector moves, the view will move across the rectangle until it corresponds to the rightmost point of the rectangle guide.
+This component consists of two files , **projector.html** and **projector.js**. This webpage is designed to provide a simplified map view that would be projected onto the drawing surface. Using data from the sensor supplied by the **sensor_server** (code in separate repository), the projector calculates the current view within the rectangle defined by the Controller as a function of distance between the two end points. For example, when the Projector is pushed to one end of the track, the map will show the leftmost portion of the Controller guide rectangle. As the projector moves, the view will move across the rectangle until it corresponds to the rightmost point of the rectangle guide. The Projector also includes a right panel that provides detailed information for a property tax assessment if it is selected in the Table (see next section).
 
-The Projector also includes a right panel that provides detailed information for a property tax assessment if it is selected in the Table (see next section).
+A keyboard can be used on the Projector to "nudge" the projection in order to fix any alignment issues that may occur after sliding the projector back and forth. The arrow keys pan the map in the corresponding direction, the A and D keys control bearing, and the W and S keys control zoom. Note that the Controller page *must* be open and running in order for the nudge feature to work, because it relies on updating the Controller map. The feature is designed to make extremely small changes on the map so that alignment can be perfected.
 
 ### Table
 This is an optional component that is used only to provide additional, detailed information about property tax assessments. The code could be repurposed to display data for other datasets as well. When the tax assessment layer is enabled and an area of the city is framed within the controller, the data corresponding to the dots shown will appear in the table. This allows the user to obtain detailed information about a specific property. Selecting an entry in the table will highlight the property on the Projector with a yellow highlighted circle.
