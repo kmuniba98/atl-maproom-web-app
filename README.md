@@ -20,21 +20,15 @@ Give examples
 
 ### Installing
 
-A step by step series of examples that tell you how to get a development env running
+After cloning the repository, ensure that node and npm are installed on your machine. Change directory into the main folder and run command `npm install` to install dependencies.
 
-Say what the step will be
+### Starting the Server
 
-```
-Give the example
-```
+Navigate to the main directory and then move down one level to the /src folder. Run `node main.js` to start the server, which will listen on the port specified within the files (by default, port 8080).
 
-And repeat
+Once the server is running, you should be able to navigate to the page in a web browser in order to view the index.html page, which shows links to the Controller, Projector, and Table pages.
 
-```
-until finished
-```
-
-End with an example of getting some data out of the system or using it for a little demo
+The Controller page and Table page should be opened as two separate tabs on the iPad (or on a designated controller computer). The Projector page should be opened on a web browser on the projector computer.
 
 ## Running the tests
 
