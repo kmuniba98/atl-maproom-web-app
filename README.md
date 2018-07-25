@@ -26,33 +26,37 @@ After cloning the repository, ensure that node and npm are installed on your mac
 
 Navigate to the main directory and then move down one level to the /src folder. Run `node main.js` to start the server, which will listen on the port specified within the files (by default, port 8080).
 
-Once the server is running, you should be able to navigate to the page in a web browser in order to view the index.html page, which shows links to the Controller, Projector, and Table pages.
+Once the server is running, you should be able to navigate to the page in a web browser (http://localhost:8080) in order to view the index.html page, which shows links to the Controller, Projector, and Table pages. These three pages can be opened as separate tabs or windows in order to test the system.
 
-The Controller page and Table page should be opened as two separate tabs on the iPad (or on a designated controller computer). The Projector page should be opened on a web browser on the projector computer.
+### Tests
 
-## Running the tests
 
-Explain how to run the automated tests for this system
+## Components
 
-### Break down into end to end tests
+This section describes the primary components of the system in detail.
 
-Explain what these tests test and why
+### Controller
+This component consists of two files, **controller.html** and **controller.js**. The Controller is the component of the system that is responsible for choosing the initial map area and toggling layers. When a new area of the map is selected in the Controller map view, the change is sent to the server so that it can be updated on the Projector. The toggling of map layers using the buttons on the right will also update the visible layers on the Projector. There is only one situation in which the Controller is not responsible for movement, which is a Projector nudge.
 
-```
-Give an example
-```
+The Controller view includes a red rectangle that is used to specify the area shown by the projector. This should be used as a guide to control which areas will be shown at the two ends of the final drawn map.
 
-### And coding style tests
+### Projector
+This component consists of two files , **projector.html** and **projector.js**. This webpage is designed to provide a simplified map view that would be projected onto the drawing surface. Using data from the sensor supplied by the **sensor_server** (code in separate repository), the projector calculates the current view within the rectangle defined by the Controller as a function of distance between the two end points. For example, when the Projector is pushed to one end of the track, the map will show the leftmost portion of the Controller guide rectangle. As the projector moves, the view will move across the rectangle until it corresponds to the rightmost point of the rectangle guide.
 
-Explain what these tests test and why
+The Projector also includes a right panel that provides detailed information for a property tax assessment if it is selected in the Table (see next section).
 
-```
-Give an example
-```
+### Table
+This is an optional component that is used only to provide additional, detailed information about property tax assessments. The code could be repurposed to display data for other datasets as well. When the tax assessment layer is enabled and an area of the city is framed within the controller, the data corresponding to the dots shown will appear in the table. This allows the user to obtain detailed information about a specific property. Selecting an entry in the table will highlight the property on the Projector with a yellow highlighted circle.
+
+Selecting an entry will also populate the right panel of the Projector with the detailed information for that given property.
 
 ## Deployment
 
-Add additional notes about how to deploy this on a live system
+In order to deploy the system for use with a designated projector system and controller, an ideal setup involves three machines: one as the main server (may be a virtual machine), the second as the projector and sensor server, and the third as a controller (preferably a tablet or other portable device).
+
+Before starting the server, it may be necessary to change the server address and port specified in the config file.
+
+The Controller page and Table page should be opened as two separate tabs on the iPad (or on a designated controller computer). The Projector page should be opened on a web browser on the projector computer, in full screen mode. The projector machine will also be running the **sensor_server**, which will send sensor readings from that machine to the main server.
 
 ## Built With
 
