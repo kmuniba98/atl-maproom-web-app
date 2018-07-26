@@ -1,10 +1,14 @@
 var socket = io('http://maproom.lmc.gatech.edu:8080/');
 
+/* Resetting table with currently avaliable points
+*/
 socket.on('updateTable', function(data) {
     console.log("updating table");
     console.log(data);
+    //Refresh by clearing table
     $("table").DataTable().destroy();
     var datatable = $("table").DataTable({
+        //Data is already in array 
         "aaData":data,
         "aoColums":[
             {title: "ID"},
@@ -80,6 +84,7 @@ socket.on('updateTable', function(data) {
             {title: "ShapeSTArea"},
             {title: "ShapeSTLength"}
         ],
+        //display options
         "info":false,
         "lengthChange": false,
         "paging": false,
@@ -87,7 +92,8 @@ socket.on('updateTable', function(data) {
     });
   });
 
-
+/* Initializes Datatables jQuery plugin - sets options
+*/
   $(document).ready( function () {
     $('table').DataTable({
         "info":false,
@@ -95,23 +101,27 @@ socket.on('updateTable', function(data) {
         "paging": false,
         "display": true,
   });
-
+/* Sets current highlighted point, chosen by user
+*/
   var currClick = -1;
     $('table tbody').on( 'click', 'tr', function () {
       var tab = $('table').DataTable();
+      //if already selected, remove highlight
       if ($(this).hasClass('selected')){
         $(this).removeClass('selected');
+          //removes highlight from projector view
           socket.emit("removeMarker", {'removeMarker':tab.row(this).data()[0]});
         currClick = -1;
       }
       else{
+          //if another point is current selected, remove that point's highlight
           if (currClick > -1){
               socket.emit("removeMarker", {'removeMarker':tab.row(currClick).data()[0]});
           };
-          //need to remove from selected class
           tab.$('tr.selected').removeClass('selected');
           currClick = tab.row(this).index();
           $(this).addClass('selected');
+          //highlight current selection
           socket.emit("newMarker", {'newMarker':tab.row(this).data(), 'index':tab.row(this).index()});
       }
   });
