@@ -54,6 +54,10 @@ Before starting the server, it may be necessary to change the server address and
 
 The Controller page and Table page should be opened as two separate tabs on the iPad (or on a designated controller computer). The Projector page should be opened on a web browser on the projector computer, in full screen mode. The projector machine will also be running the **sensor_server**, which will send sensor readings from that machine to the main server.
 
+## Troubleshooting 
+
+For table.js - built around [DataTables](https://datatables.net/), a jQuery plugin. If there is an error in the aligment of the HTML table (example, unequal number of ths and tds), a popup error will be thrown that refers to the row/index. If there is an error in the handling of data - for example, not accessing a nested layer in a JSON object - the data just won't appear in the table, resulting in either missing data or "No data avaliable." message.
+
 ## Built With
 
 * [MapBox GL](https://www.mapbox.com/mapbox-gl-js/api/) - Open-source libraries for embedding maps
