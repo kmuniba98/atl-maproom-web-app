@@ -50,6 +50,7 @@ io.on('connection', function (socket) {
   // Fired when map is updated on controller
   socket.on('mapUpdate', function (data) {
     socket.broadcast.emit('pushMapUpdate', data)
+    console.log("Updated")
   });
 
   // Fired when tax assessment layer is added from controller
