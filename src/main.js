@@ -64,16 +64,16 @@ io.on('connection', function (socket) {
   });
 
   // Fired when the table
-  socket.on("updateTable", function(data){
+  socket.on("processTableData", function(data){
     getPoints(data).then(function(results){
       console.log("reached")
-      socket.broadcast.emit("updateTable", results);
+      socket.broadcast.emit("displayTableData", results);
     })
   });
 
   // Fired when the table
   socket.on("refreshTable", function(data){
-    console.log("REFRESH")
+    socket.broadcast.emit("getTableBounds");
   });
 
   // Fired when a tax assessment entry is deselected from the controller

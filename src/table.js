@@ -2,7 +2,7 @@ var socket = io('http://maproom.lmc.gatech.edu:8080/');
 
 /* Resetting table with currently avaliable points
 */
-socket.on('updateTable', function(data) {
+socket.on('displayTableData', function(data) {
     console.log("updating table");
     console.log(data);
     //Refresh by clearing table

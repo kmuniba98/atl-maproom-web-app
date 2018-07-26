@@ -40,18 +40,14 @@ socket.on('pushMapUpdate', function(data) {
 
   // Performs the map movement to transition to the new position
   map.easeTo({center: {lng: projLong, lat:projLat}, zoom:(curZoom + 2.7), bearing:curBearing, duration:1000})
-
-
-
-
 });
 
 // Updates the points in the table of tax assessment data if the layer is enabled
-socket.on('updateTableProj', function(data) {
+socket.on('getTableBounds', function(data) {
 
   if (taxAssessmentEnabled){
     currentPoints = map.queryRenderedFeatures({'layers':['Tax Assessment']});
-    socket.emit("updateTable", map.queryRenderedFeatures({'layers':['Tax Assessment']}));
+    socket.emit("processTableData", map.queryRenderedFeatures({'layers':['Tax Assessment']}));
   };
 });
 
