@@ -8,7 +8,7 @@ socket.on('updateTable', function(data) {
     //Refresh by clearing table
     $("table").DataTable().destroy();
     var datatable = $("table").DataTable({
-        //Data is already in array 
+        //Data is already in array
         "aaData":data,
         "aoColums":[
             {title: "ID"},
@@ -101,6 +101,11 @@ socket.on('updateTable', function(data) {
         "paging": false,
         "display": true,
   });
+
+document.getElementById('refreshTable').addEventListener('click', function(){
+  socket.emit('refreshTable');
+});
+
 /* Sets current highlighted point, chosen by user
 */
   var currClick = -1;

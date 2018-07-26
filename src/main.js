@@ -72,11 +72,8 @@ io.on('connection', function (socket) {
   });
 
   // Fired when the table
-  socket.on("updateTableProj", function(data){
-    getPoints(data).then(function(results){
-      console.log("reached")
-      socket.broadcast.emit("updateTable", results);
-    })
+  socket.on("refreshTable", function(data){
+    console.log("REFRESH")
   });
 
   // Fired when a tax assessment entry is deselected from the controller
