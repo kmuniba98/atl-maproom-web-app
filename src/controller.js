@@ -7,9 +7,14 @@ var rectWidth = 800;
 var rectHeight = 200;
 var taxAssessmentEnabled = false;
 
-socket.on('pushSensorUpdate', function(data) {
-  console.log("New sensor reading: " + data.distance)
-})
+/**
+ * when arrow keys are pressed from the Projector to align the map,
+ * Socket emmit sends changes back to be updated on Controller
+ */
+
+ socket.on('pushSensorUpdate', function(data) {
+   console.log("New sensor reading: " + data.distance)
+ })
 
 socket.on('projNudge', function(data) {
 
@@ -39,11 +44,15 @@ socket.on('projNudge', function(data) {
 
 mapboxgl.accessToken = 'pk.eyJ1IjoibW9kZXJubG92ZWxhY2UiLCJhIjoiY2pmY24zNzhmM2VmaTJ4cDRlNmVoa24wdCJ9.7GBTZc76YFp947kU7A14Gg';
 
+/**
+ * creates the MapBox GL map with initial parameters
+ */
+
 var map = new mapboxgl.Map({
     container: 'map',
-    style: 'mapbox://styles/modernlovelace/cjjpqv3keic0y2rni1j6niy1k',
+    style: 'mapbox://styles/modernlovelace/cjjpqv3keic0y2rni1j6niy1k', // style from online MapBox GL Studio
     zoom: 12,
-    bearing: 0,
+    bearing: 0, // refers to rotation angle
     center: [-84.3951, 33.7634],
     interactive: true
 });
@@ -129,7 +138,7 @@ function getGeoCoordinates(){
 /**
  * returns the EndCenters of the selection box
  * @return {EndCenters}
- *         the lng & lat coordinates of the right-most and left-most squares of the selection box
+ *        the lng & lat coordinates of the right-most and left-most squares of the selection box
  */
 function getEndCenters(){
   var height = rectHeight;
@@ -147,7 +156,7 @@ function getEndCenters(){
 }
 
 /**
- * toggle the size of selection rectangle between shortRect & longRect;
+ * function to toggle the size of selection rectangle between shortRect & longRect;
  * CURRENTLY UNUSED - to activate, remove "display:none;" in changeRect CSS
  */
 function toggleRectangle() {
@@ -168,6 +177,10 @@ function toggleRectangle() {
     }
 }
 
+/**
+ * event listener calling toggleRectangle() when changeRect button is pressed,
+ * then updating all map parameters so Projector can properly display
+ */
 document.getElementById('changeRect').addEventListener('click', function () {
   toggleRectangle();
   console.log("Sending rectangle change to server...")
@@ -318,7 +331,9 @@ map.on('moveend', function (e) {
                                 'activeRectangle':activeRectangle.id, 'endCenters':getEndCenters()})
 });
 
-// link layers to buttons
+/**
+ * link layers to buttons to toggle on screen
+ */
 var toggleableLayerIds = [ 'Tax Assessment', 'Median Income Change', 'College Educated Change', 'White Occupants Change', 'MARTA' ];
 
 for (var i = 0; i < toggleableLayerIds.length; i++) {
