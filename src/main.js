@@ -71,6 +71,14 @@ io.on('connection', function (socket) {
     })
   });
 
+  // Fired when the table
+  socket.on("updateTableProj", function(data){
+    getPoints(data).then(function(results){
+      console.log("reached")
+      socket.broadcast.emit("updateTable", results);
+    })
+  });
+
   // Fired when a tax assessment entry is deselected from the controller
   socket.on("removeMarker", function(data){
     socket.broadcast.emit("removeMarker", data);

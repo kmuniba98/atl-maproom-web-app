@@ -41,12 +41,18 @@ socket.on('pushMapUpdate', function(data) {
   // Performs the map movement to transition to the new position
   map.easeTo({center: {lng: projLong, lat:projLat}, zoom:(curZoom + 2.7), bearing:curBearing, duration:1000})
 
-  // Updates the points in the table of tax assessment data if the layer is enabled
+
+
+
+});
+
+// Updates the points in the table of tax assessment data if the layer is enabled
+socket.on('updateTableProj', function(data) {
+
   if (taxAssessmentEnabled){
     currentPoints = map.queryRenderedFeatures({'layers':['Tax Assessment']});
     socket.emit("updateTable", map.queryRenderedFeatures({'layers':['Tax Assessment']}));
   };
-
 });
 
 /** Fired when the sensor server publishes a measurement
@@ -126,7 +132,7 @@ socket.on("newMarker", function(data){
     var pt = currentPoints[parseInt(data['index'])].properties.id;
     var filter = ['match', ['get', 'id'], pt, true, false]
     map.setFilter("place-highlight", filter);
-            
+
     document.getElementById("ID").innerHTML = current["0"];
     document.getElementById("Latitude").innerHTML = current["1"];
     document.getElementById("Longitude").innerHTML = current["2"];
