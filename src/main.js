@@ -65,6 +65,7 @@ io.on('connection', function (socket) {
 
   // Fired when the table
   socket.on("processTableData", function(data){
+    console.log("Started")
     getPoints(data).then(function(results){
       console.log("process table data")
       socket.broadcast.emit("displayTableData", results);
