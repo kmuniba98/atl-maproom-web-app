@@ -45,8 +45,11 @@ socket.on('pushMapUpdate', function(data) {
 // Updates the points in the table of tax assessment data if the layer is enabled
 socket.on('getTableBounds', function(data) {
 
+  console.log("Got here")
+
   if (taxAssessmentEnabled){
     currentPoints = map.queryRenderedFeatures({'layers':['Tax Assessment']});
+    console.log("Queried rendered features")
     socket.emit("processTableData", map.queryRenderedFeatures({'layers':['Tax Assessment']}));
   };
 });
