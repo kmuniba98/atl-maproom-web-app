@@ -53,14 +53,14 @@ io.on('connection', function (socket) {
     console.log("Map Updated")
   });
 
-  // Fired when tax assessment layer is added from controller
+  // Fired when property assessment layer is added from controller
   socket.on("addTA", function(data){
     socket.broadcast.emit("addTA", data);
   });
 
-  // Fired when tax assessment layer is removed from controller
+  // Fired when property assessment layer is removed from controller
   socket.on("removeTA", function(data){
-    console.log("Tax assessment removed")
+    console.log("Property assessment removed")
     socket.broadcast.emit("removeTA", data);
   });
 
@@ -78,12 +78,12 @@ io.on('connection', function (socket) {
     socket.broadcast.emit("getTableBounds");
   });
 
-  // Fired when a tax assessment entry is deselected from the controller
+  // Fired when a property assessment entry is deselected from the controller
   socket.on("removeMarker", function(data){
     socket.broadcast.emit("removeMarker", data);
   });
 
-  // Fired when a tax assessment entry is selected on the controller
+  // Fired when a property assessment entry is selected on the controller
   socket.on("newMarker", function(data){
     socket.broadcast.emit("newMarker", data);
   });

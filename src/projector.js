@@ -7,7 +7,7 @@ var curGeoCoords, curActiveRectangle, curEndCenters
 var leftCenter = {lng:-84.3880,lat:33.7490}
 var rightCenter = {lng:-82.3880,lat:33.7490}
 var rc, lc
-var taxAssessmentEnabled = false;
+var propertyAssessmentEnabled = false;
 var currentPoints = null;
 var socket = io('http://maproom.lmc.gatech.edu:8080/');
 var projRatio = 0.5
@@ -42,11 +42,11 @@ socket.on('pushMapUpdate', function(data) {
   map.easeTo({center: {lng: projLong, lat:projLat}, zoom:(curZoom + 2.7), bearing:curBearing, duration:1000})
 });
 
-// Updates the points in the table of tax assessment data if the layer is enabled
+// Updates the points in the table of property assessment data if the layer is enabled
 socket.on('getTableBounds', function(data) {
-  if (taxAssessmentEnabled){
-    currentPoints = map.queryRenderedFeatures({'layers':['Tax Assessment']});
-    socket.emit("processTableData", map.queryRenderedFeatures({'layers':['Tax Assessment']}));
+  if (propertyAssessmentEnabled){
+    currentPoints = map.queryRenderedFeatures({'layers':['Property Assessment']});
+    socket.emit("processTableData", map.queryRenderedFeatures({'layers':['Property Assessment']}));
   };
 });
 
@@ -95,30 +95,30 @@ socket.on('pushChangeSize', function(data){
 }); */
 
 /** After receiving a request from the server,
- *  shows the tax assessment data layer
+ *  shows the property assessment data layer
  */
 socket.on('addTA', function(data){
-  map.setLayoutProperty('Tax Assessment', 'visibility', 'visible');
-  taxAssessmentEnabled = true;
+  map.setLayoutProperty('Property Assessment', 'visibility', 'visible');
+  propertyAssessmentEnabled = true;
 });
 
 /** After receiving a request from the server,
- *  hides the property tax assessment layer
+ *  hides the property property assessment layer
  */
 socket.on('removeTA', function(data){
-  map.setLayoutProperty('Tax Assessment', 'visibility', 'none');
-  taxAssessmentEnabled = false;
+  map.setLayoutProperty('Property Assessment', 'visibility', 'none');
+  propertyAssessmentEnabled = false;
 });
 
-/** Removes specific tax asssessment highlight circle
- *  for one property tax assessment data point from the map
+/** Removes specific property asssessment highlight circle
+ *  for one property property assessment data point from the map
  */
   socket.on("removeMarker", function(data){
     var filter = ['match', ['get', 'id'], -1, true, false];
     map.setFilter("place-highlight", filter);
   });
 
-/** Highlights a specific tax assessment property on the map
+/** Highlights a specific property assessment property on the map
  *  with a yellow circle when a property is selected on
  *  the data table (table.js).
  */
@@ -334,8 +334,8 @@ map.on('load', function () {
             'fill-opacity': 0.5
         }
     });
-    // tax layer
-    map.addSource('Tax Assessment', {
+    // property assessment layer
+    map.addSource('Property Assessment', {
         type: 'vector',
         url: 'mapbox://modernlovelace.6sytmmfk'
     });
@@ -343,7 +343,7 @@ map.on('load', function () {
     map.addLayer({
         'id': 'place-highlight',
         'type': 'circle',
-        'source': 'Tax Assessment',
+        'source': 'Property Assessment',
         'source-layer': 'allPoints07-24-d8xzn1',
         'paint': {
           'circle-color': '#FADA5E',
@@ -353,9 +353,9 @@ map.on('load', function () {
         'filter': ['==', 'ID', -1]
     });
     map.addLayer({
-        'id': 'Tax Assessment',
+        'id': 'Property Assessment',
         'type': 'circle',
-        'source': 'Tax Assessment',
+        'source': 'Property Assessment',
         'interactive': true,
         "layout": {
                   "text-font": "Open Sans Semibold, Arial Unicode MS Bold",

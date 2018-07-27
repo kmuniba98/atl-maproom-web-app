@@ -5,7 +5,7 @@ var socket = io('http://maproom.lmc.gatech.edu:8080/');
 var activeRectangle = document.getElementById("longRect");
 var rectWidth = 800;
 var rectHeight = 200;
-var taxAssessmentEnabled = false;
+var propertyAssessmentEnabled = false;
 
 /**
  * when arrow keys are pressed from the Projector to align the map,
@@ -228,7 +228,7 @@ map.on('load', function () {
             'line-width': 8
         }
     });
-    // tax layer
+    // property layer
     // Change median income later
     map.addSource('ACS', {
         type: 'vector',
@@ -334,7 +334,7 @@ map.on('moveend', function (e) {
 /**
  * link layers to buttons to toggle on screen
  */
-var toggleableLayerIds = [ 'Tax Assessment', 'Median Income Change', 'College Educated Change', 'White Occupants Change', 'MARTA' ];
+var toggleableLayerIds = [ 'Property Assessment', 'Median Income Change', 'College Educated Change', 'White Occupants Change', 'MARTA' ];
 
 for (var i = 0; i < toggleableLayerIds.length; i++) {
     var id = toggleableLayerIds[i];
@@ -345,7 +345,7 @@ for (var i = 0; i < toggleableLayerIds.length; i++) {
         var clickedLayer = this.textContent;
         e.preventDefault();
         e.stopPropagation();
-        if (!(clickedLayer===('Tax Assessment'))){
+        if (!(clickedLayer===('Property Assessment'))){
             var visibility = map.getLayoutProperty(clickedLayer, 'visibility');
             if (visibility === 'visible') {
               map.setLayoutProperty(clickedLayer, 'visibility', 'none');
@@ -357,14 +357,14 @@ for (var i = 0; i < toggleableLayerIds.length; i++) {
               socket.emit('showLayer', {'clickedLayer':clickedLayer})
           };
         }else{
-            if (taxAssessmentEnabled){
-                console.log("Removing tax assessments...");
+            if (propertyAssessmentEnabled){
+                console.log("Removing property assessments...");
                 socket.emit("removeTA", {'info':'none'});
-                taxAssessmentEnabled = false;
+                propertyAssessmentEnabled = false;
                 this.className = "";
             }else{
                 socket.emit("addTA", {'info':'none'});
-                taxAssessmentEnabled = true;
+                propertyAssessmentEnabled = true;
                 this.className = 'active';
             }
         }
