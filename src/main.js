@@ -66,13 +66,14 @@ io.on('connection', function (socket) {
   // Fired when the table
   socket.on("processTableData", function(data){
     getPoints(data).then(function(results){
-      console.log("reached")
+      console.log("process table data")
       socket.broadcast.emit("displayTableData", results);
     })
   });
 
   // Fired when the table
   socket.on("refreshTable", function(data){
+    console.log("Refresh table, firing get table bounds")
     socket.broadcast.emit("getTableBounds");
   });
 
