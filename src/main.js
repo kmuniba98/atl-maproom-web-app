@@ -50,7 +50,7 @@ io.on('connection', function (socket) {
   // Fired when map is updated on controller
   socket.on('mapUpdate', function (data) {
     socket.broadcast.emit('pushMapUpdate', data)
-    console.log("Updated")
+    console.log("Map Updated")
   });
 
   // Fired when tax assessment layer is added from controller
@@ -60,14 +60,14 @@ io.on('connection', function (socket) {
 
   // Fired when tax assessment layer is removed from controller
   socket.on("removeTA", function(data){
+    console.log("Tax assessment removed")
     socket.broadcast.emit("removeTA", data);
   });
 
   // Fired when the table
   socket.on("processTableData", function(data){
-    console.log("Started")
+    console.log("Loading data for table")
     getPoints(data).then(function(results){
-      console.log("process table data")
       socket.broadcast.emit("displayTableData", results);
     })
   });
