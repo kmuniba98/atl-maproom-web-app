@@ -275,7 +275,7 @@ map.on('load', function () {
         'id': 'Median Income Change',
         'type': 'fill',
         'source': 'ACS',
-        'source-layer': 'merged2-1ylp9s',
+        'source-layer': 'merged2-53z777',
         'layout': {
             'visibility': 'none',
         },
@@ -296,7 +296,7 @@ map.on('load', function () {
         'id': 'College Educated Change',
         'type': 'fill',
         'source': 'ACS',
-        'source-layer': 'merged2-1ylp9s',
+        'source-layer': 'merged2-53z777',
         'layout': {
             'visibility': 'none',
         },
@@ -317,7 +317,7 @@ map.on('load', function () {
         'id': 'White Occupants Change',
         'type': 'fill',
         'source': 'ACS',
-        'source-layer': 'merged2-1ylp9s',
+        'source-layer': 'merged2-53z777',
         'layout': {
             'visibility': 'none',
         },
