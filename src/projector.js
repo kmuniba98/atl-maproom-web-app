@@ -337,14 +337,14 @@ map.on('load', function () {
     // property assessment layer
     map.addSource('Property Assessment', {
         type: 'vector',
-        url: 'mapbox://modernlovelace.6sytmmfk'
+        url: 'mapbox://atlmaproom.0u47hnj3'
     });
 
     map.addLayer({
         'id': 'place-highlight',
         'type': 'circle',
         'source': 'Property Assessment',
-        'source-layer': 'allPoints07-24-d8xzn1',
+        'source-layer': 'allPoints07-24-ah78d9',
         'paint': {
           'circle-color': '#FADA5E',
           'circle-radius': 20,
