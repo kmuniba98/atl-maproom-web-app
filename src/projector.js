@@ -269,7 +269,7 @@ map.on('load', function () {
     // Change median income later
     map.addSource('ACS', {
         type: 'vector',
-        url: 'mapbox://modernlovelace.3jq6hc6x'
+        url: 'mapbox://atlmaproom.c97zkvti'
     });
     map.addLayer({
         'id': 'Median Income Change',
