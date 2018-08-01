@@ -209,7 +209,7 @@ socket.on("newMarker", function(data){
 var map = new mapboxgl.Map({
   container: 'map', // container id
   center: [-84.27173029708604, 33.76777287243536],
-  style:'mapbox://styles/modernlovelace/cjjpqv3keic0y2rni1j6niy1k'
+  style:'mapbox://styles/atlmaproom/cjkbg9s6m8njm2roxkx8gprzj'
 });
 
 /** Provides logic to send nudge requests to the server
