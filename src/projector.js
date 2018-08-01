@@ -383,13 +383,13 @@ map.on('load', function () {
     // MARTA Buses and Rail (all one color)
     map.addSource('MARTA', {
         type: 'vector',
-        url: 'mapbox://modernlovelace.6n51t4jo'
+        url: 'mapbox://atlmaproom.cxppjs0d'
     });
     map.addLayer({
         'id': 'MARTA',
         'type': 'line',
         'source': 'MARTA',
-        'source-layer': 'marta-8pkeb3',
+        'source-layer': 'marta-bi9p6y',
         'layout': {
             'visibility': 'none',
             'line-join': 'round',

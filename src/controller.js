@@ -211,13 +211,13 @@ map.on('load', function () {
     // beltline layer
     map.addSource('beltline', {
         type: 'vector',
-        url: 'mapbox://modernlovelace.9bd0nhcf'
+        url: 'mapbox://atlmaproom.9v2e99o9'
     });
     map.addLayer({
         'id': 'beltline',
         'type': 'line',
         'source': 'beltline',
-        'source-layer': 'Beltline_Weave-a4j3wv',
+        'source-layer': 'Beltline_Weave-9xlpb5',
         'layout': {
             'visibility': 'visible',
             'line-join': 'round',
@@ -300,13 +300,13 @@ map.on('load', function () {
     // MARTA Buses and Rail (all one color)
     map.addSource('MARTA', {
         type: 'vector',
-        url: 'mapbox://modernlovelace.6n51t4jo'
+        url: 'mapbox://atlmaproom.cxppjs0d'
     });
     map.addLayer({
         'id': 'MARTA',
         'type': 'line',
         'source': 'MARTA',
-        'source-layer': 'marta-8pkeb3',
+        'source-layer': 'marta-bi9p6y',
         'layout': {
             'visibility': 'none',
             'line-join': 'round',
