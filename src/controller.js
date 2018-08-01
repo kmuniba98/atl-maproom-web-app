@@ -50,7 +50,7 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiYXRsbWFwcm9vbSIsImEiOiJjamtiZzJ6dGIybTBkM3dwY
 
 var map = new mapboxgl.Map({
     container: 'map',
-    style: 'mapbox://styles/modernlovelace/cjjpqv3keic0y2rni1j6niy1k', // style from online MapBox GL Studio
+    style: 'mapbox://styles/atlmaproom/cjkbg9s6m8njm2roxkx8gprzj', // style from online MapBox GL Studio
     zoom: 12,
     bearing: 0, // refers to rotation angle
     center: [-84.3951, 33.7634],
