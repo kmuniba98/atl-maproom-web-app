@@ -12,7 +12,7 @@ var currentPoints = null;
 var socket = io('http://maproom.lmc.gatech.edu:8080/');
 var projRatio = 0.5
 
-mapboxgl.accessToken = 'pk.eyJ1IjoibW9kZXJubG92ZWxhY2UiLCJhIjoiY2pmY24zNzhmM2VmaTJ4cDRlNmVoa24wdCJ9.7GBTZc76YFp947kU7A14Gg';
+mapboxgl.accessToken = 'pk.eyJ1IjoiYXRsbWFwcm9vbSIsImEiOiJjamtiZzJ6dGIybTBkM3dwYXQ2c3lrMWs3In0.tJzsvakNHTk7G4iu73aP7g';
 
 /** Fires when the controller map is moved. Updates the
  *  current view by using current projector location
