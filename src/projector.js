@@ -378,7 +378,7 @@ map.on('load', function () {
             },
             'circle-opacity': 1
         },
-        'source-layer': 'allPoints07-24-d8xzn1'
+        'source-layer': 'allPoints07-24-ah78d9'
     });
     // MARTA Buses and Rail (all one color)
     map.addSource('MARTA', {
