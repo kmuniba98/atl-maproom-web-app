@@ -3,7 +3,7 @@ var socket = io('http://maproom.lmc.gatech.edu:8080/');
 
 // Global Variables
 var activeRectangle = document.getElementById("longRect");
-var rectWidth = 800;
+var rectWidth = 730;
 var rectHeight = 200;
 var propertyAssessmentEnabled = false;
 
