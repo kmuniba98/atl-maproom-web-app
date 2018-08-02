@@ -172,7 +172,7 @@ function toggleRectangle() {
         x.style.display = "none";
         y.style.display = "block";
         activeRectangle = y;
-        rectWidth = 800;
+        rectWidth = 730;
         rectHeight = 200;
     }
 }
