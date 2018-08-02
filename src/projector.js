@@ -60,8 +60,10 @@ socket.on('pushSensorUpdate', function(data) {
   // These two numbers are VERY important, they define the start
   // and end measurements between which the projector position is
   // linearly modeled.
-  var start = 1906
-  var end = 5012
+  var start 900
+  var end = 6000
+  //var start = 1906
+  //var end = 5012
 
   // Simple fraction of current position over total change
   projRatio = ((data.distance - start) / (end-start))
