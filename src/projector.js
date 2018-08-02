@@ -61,7 +61,7 @@ socket.on('pushSensorUpdate', function(data) {
   // and end measurements between which the projector position is
   // linearly modeled.
   var start = 1921
-  var end = 4997
+  var end = 5012
 
   // Simple fraction of current position over total change
   projRatio = ((data.distance - start) / (end-start))
