@@ -39,7 +39,7 @@ socket.on('pushMapUpdate', function(data) {
   projLong = leftCenter.lng + (projRatio * (rightCenter.lng - leftCenter.lng))
 
   // Performs the map movement to transition to the new position
-  map.easeTo({center: {lng: projLong, lat:projLat}, zoom:(curZoom), bearing:curBearing, duration:1000})
+  map.easeTo({center: {lng: projLong, lat:projLat}, zoom:(curZoom + 2.7), bearing:curBearing, duration:1000})
 });
 
 // Updates the points in the table of property assessment data if the layer is enabled
@@ -70,7 +70,7 @@ socket.on('pushSensorUpdate', function(data) {
   projLat = leftCenter.lat + (projRatio * (rightCenter.lat - leftCenter.lat))
   projLong = leftCenter.lng + (projRatio * (rightCenter.lng - leftCenter.lng))
 
-  map.easeTo({center: {lng: projLong, lat:projLat}, zoom:(curZoom), bearing:curBearing, duration:1000})
+  map.easeTo({center: {lng: projLong, lat:projLat}, zoom:(curZoom + 2.7), bearing:curBearing, duration:1000})
 
 });
 
